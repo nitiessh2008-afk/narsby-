@@ -11,13 +11,34 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
+import os
+import base64
+
+# -----------------------------------------------------------------------------
+# 0. BRANDING ASSETS (Narsby logo)
+# -----------------------------------------------------------------------------
+# Place these two files in the SAME folder as this .py file in your repo:
+#   narsby_logo.png  -> full logo lockup (icon + wordmark), used on hero/login screens
+#   narsby_icon.png   -> icon-only mark, used in the sidebar / browser tab icon
+LOGO_FULL = "narsby_logo.png"
+LOGO_ICON = "narsby_icon.png"
+
+def _img_b64(path):
+    """Read a local image and return a base64 data-URI, or None if missing."""
+    if os.path.isfile(path):
+        with open(path, "rb") as f:
+            return "data:image/png;base64," + base64.b64encode(f.read()).decode()
+    return None
+
+LOGO_FULL_B64 = _img_b64(LOGO_FULL)
+LOGO_ICON_B64 = _img_b64(LOGO_ICON)
 
 # -----------------------------------------------------------------------------
 # 1. PAGE SETUP & LIGHT, COLOURFUL THEME
 # -----------------------------------------------------------------------------
 st.set_page_config(
     page_title="Narsby • Startup Procurement Platform",
-    page_icon="💡",
+    page_icon=(LOGO_ICON if os.path.isfile(LOGO_ICON) else "💡"),
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -348,11 +369,39 @@ if 'initialized' not in st.session_state:
             'live_url': 'https://smartwater.pune.gov.in/jaldrishti-case-study', 'verified': True
         },
         {
+            'title': 'Smart Bore-well IoT Water Metering for NMC (Nashik)', 'startup_name': 'JalDrishti IoT Pvt Ltd',
+            'client': 'Nashik Municipal Corporation (NMC)', 'year': '2023', 'sector': 'Water & Smart City',
+            'outcome': 'Metered 12,000+ bore-wells; reduced illegal tapping incidents by 31%.',
+            'proof_file': 'NMC_Work_Order_Closure.pdf', 'trl_demonstrated': 'TRL 7',
+            'live_url': 'https://smartnashik.gov.in/jaldrishti-metering', 'verified': True
+        },
+        {
+            'title': 'Acoustic Leak Sensor Pilot for PCMC (Pimpri-Chinchwad)', 'startup_name': 'JalDrishti IoT Pvt Ltd',
+            'client': 'Pimpri-Chinchwad Municipal Corporation (PCMC)', 'year': '2022 - 2023', 'sector': 'Water & Smart City',
+            'outcome': 'Cut average leak-detection time from 9 days to under 36 hours.',
+            'proof_file': 'PCMC_Pilot_Completion_Report.pdf', 'trl_demonstrated': 'TRL 6',
+            'live_url': 'https://smartpcmc.gov.in/jaldrishti-pilot', 'verified': True
+        },
+        {
             'title': 'Drone Road Condition Mapping for TMC (Thane)', 'startup_name': 'AeroVision AI Robotics Pvt Ltd',
             'client': 'Thane Municipal Corporation (TMC)', 'year': '2024', 'sector': 'AI & Drone Mobility',
             'outcome': 'Mapped 140 km arterial roads; reduced physical survey duration by 85%.',
             'proof_file': 'TMC_Work_Completion_Letter.pdf', 'trl_demonstrated': 'TRL 7',
             'live_url': 'https://smartthane.gov.in/drone-surveys', 'verified': True
+        },
+        {
+            'title': 'Autonomous Pothole Detection Survey for PWD (Nagpur)', 'startup_name': 'AeroVision AI Robotics Pvt Ltd',
+            'client': 'Public Works Department, Nagpur Division', 'year': '2023', 'sector': 'AI & Drone Mobility',
+            'outcome': 'Classified 2,100+ potholes across 210 km with 91% detection accuracy.',
+            'proof_file': 'PWD_Nagpur_Completion_Certificate.pdf', 'trl_demonstrated': 'TRL 7',
+            'live_url': 'https://pwd.nagpur.gov.in/aerovision-survey', 'verified': True
+        },
+        {
+            'title': 'Aerial Traffic Density Analytics for Smart City Aurangabad', 'startup_name': 'AeroVision AI Robotics Pvt Ltd',
+            'client': 'Aurangabad Smart City Development Corporation', 'year': '2022', 'sector': 'AI & Drone Mobility',
+            'outcome': 'Delivered peak-hour congestion heatmaps across 18 junctions.',
+            'proof_file': 'Aurangabad_SmartCity_WorkOrder.pdf', 'trl_demonstrated': 'TRL 6',
+            'live_url': 'https://smartaurangabad.gov.in/aerovision-traffic', 'verified': True
         }
     ]
 
@@ -476,6 +525,51 @@ TAG_CLASS = {'water': 'tag-water', 'drone': 'tag-drone', 'health': 'tag-health',
 def sector_pill(ch):
     cls = TAG_CLASS.get(ch.get('tag', ''), 'tag-gov')
     return f"<span class='pill-tag {cls}'>{ch['sector']}</span>"
+
+# -----------------------------------------------------------------------------
+# 3b. PORTFOLIO RELEVANCE ENGINE
+# Scores how relevant a startup's past project is to a given challenge, using
+# sector match + keyword overlap between the challenge text and the past work.
+# -----------------------------------------------------------------------------
+STOPWORDS = {
+    'the','a','an','and','or','to','of','in','on','for','with','by','is','are','be','this','that',
+    'we','our','their','it','at','as','from','into','via','using','over','under','per','than','then',
+    'will','can','need','needs','required','requires','system','solution','project','pilot'
+}
+
+def _keywords(*texts):
+    words = set()
+    for t in texts:
+        if not t:
+            continue
+        for w in str(t).lower().replace('/', ' ').replace('-', ' ').replace(',', ' ').replace('.', ' ').split():
+            w = ''.join(ch for ch in w if ch.isalnum())
+            if len(w) > 3 and w not in STOPWORDS:
+                words.add(w)
+    return words
+
+def compute_relevance_score(challenge, past_work):
+    """Returns (score 0-100, breakdown dict) for how relevant a past project is to a challenge."""
+    sector_match = challenge.get('sector', '').strip().lower() == past_work.get('sector', '').strip().lower()
+    ch_words = _keywords(challenge.get('title', ''), challenge.get('description', ''), challenge.get('target_kpi', ''), challenge.get('sector', ''))
+    pw_words = _keywords(past_work.get('title', ''), past_work.get('outcome', ''), past_work.get('sector', ''))
+    overlap = ch_words & pw_words
+    keyword_score = 0
+    if ch_words:
+        keyword_score = min(60, round((len(overlap) / max(1, len(ch_words))) * 60))
+    sector_score = 40 if sector_match else 0
+    total = min(100, sector_score + keyword_score)
+    return total, {'sector_match': sector_match, 'shared_keywords': sorted(overlap)[:6], 'keyword_score': keyword_score, 'sector_score': sector_score}
+
+def relevance_label(score):
+    if score >= 65:
+        return "High Relevance", "tag-eligible"
+    elif score >= 35:
+        return "Moderate Relevance", "tag-validated"
+    else:
+        return "Low Relevance", "tag-flagged"
+
+MIN_PORTFOLIO_PROJECTS = 3  # minimum verified past projects required before a startup can submit any proposal
 
 def render_public_overview():
     all_ch = st.session_state['challenges']
@@ -626,9 +720,10 @@ def render_login_section():
     st.markdown("<div class='login-shell'>", unsafe_allow_html=True)
     lp1, lp2 = st.columns([1, 1.35])
     with lp1:
-        st.markdown("""
+        logo_line = f'<img src="{LOGO_ICON_B64}" style="width:34px; height:34px; object-fit:contain; vertical-align:middle; margin-right:8px; border-radius:6px;" />Narsby' if LOGO_ICON_B64 else '💡 Narsby'
+        st.markdown(f"""
         <div class="login-hero-panel">
-            <div style="font-size:26px; font-weight:900; margin-bottom:6px;">💡 Narsby</div>
+            <div style="font-size:26px; font-weight:900; margin-bottom:6px; display:flex; align-items:center;">{logo_line}</div>
             <div style="font-size:14px; opacity:0.9; margin-bottom:22px;">Govt of Maharashtra · SIH 2026 · GFR 194 Innovation Sandbox</div>
             <div class="login-feature">⚡ <div>Post outcome-based challenges & sanction pilots in days, not months.</div></div>
             <div class="login-feature">🔎 <div>Automated DPIIT eligibility screening for every applicant startup.</div></div>
@@ -697,6 +792,8 @@ def render_login_section():
 # -----------------------------------------------------------------------------
 if not st.session_state['logged_in']:
     render_notification_bell()
+    if LOGO_FULL_B64:
+        st.markdown(f"<div style='text-align:center; margin:6px 0 4px 0;'><img src='{LOGO_FULL_B64}' style='max-width:220px; width:100%; height:auto;' /></div>", unsafe_allow_html=True)
     st.markdown("""
     <div class="hero-banner-public">
         <div class="hero-title">💡 Narsby — Startup-Friendly Public Procurement Platform</div>
@@ -724,9 +821,10 @@ if not st.session_state['logged_in']:
 # 5. SIDEBAR NAVIGATION (ROLE-ISOLATED)
 # -----------------------------------------------------------------------------
 with st.sidebar:
-    st.markdown("""
+    logo_html = f'<img src="{LOGO_ICON_B64}" style="width:38px; height:38px; object-fit:contain; border-radius:8px;" />' if LOGO_ICON_B64 else '<span style="font-size:32px;">💡</span>'
+    st.markdown(f"""
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
-        <span style="font-size:32px;">💡</span>
+        {logo_html}
         <div>
             <div style="font-size:24px; font-weight:900; color:#1e1b4b; line-height:1.1;">Narsby</div>
             <div style="font-size:13px; font-weight:700; color:#6366f1; letter-spacing:.4px;">Govt of Maharashtra</div>
@@ -924,13 +1022,21 @@ elif st.session_state['user_role'] == 'Government Official':
         for prop in st.session_state['proposals']:
             elig_ok = prop.get('eligibility_status', 'Not Screened')
             elig_cls = "tag-eligible" if 'Eligible' in elig_ok else "tag-flagged"
+            rel_score = prop.get('portfolio_relevance_score')
+            portfolio_count = prop.get('portfolio_project_count')
+            if rel_score is not None:
+                rel_label, rel_cls = relevance_label(rel_score)
+                rel_pill = f'<span class="pill-tag {rel_cls}">Portfolio Relevance: {rel_label} ({rel_score}%)</span>'
+            else:
+                rel_pill = '<span class="pill-tag tag-gov">Portfolio Relevance: Legacy Record</span>'
+            portfolio_pill = f'<span class="pill-tag tag-gov">📁 {portfolio_count} Past Projects</span>' if portfolio_count is not None else ''
             st.markdown(f"""
             <div class="item-box">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <div>
                         <h3 style="margin:0; color:#1e1b4b; font-size:22px; font-weight:800;">{prop['startup_name']}</h3>
                         <div style="font-size:15px; color:#64748b; margin-top:4px;">Challenge: <strong style="color:#0f172a;">{prop['challenge_title']}</strong> · DPIIT: <strong>{prop['dpiit_id']}</strong></div>
-                        <div style="margin-top:8px;"><span class="pill-tag {elig_cls}">Eligibility: {elig_ok}</span> <span class="pill-tag tag-validated">AI Match: {prop['match_score']}%</span></div>
+                        <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap;"><span class="pill-tag {elig_cls}">Eligibility: {elig_ok}</span> <span class="pill-tag tag-validated">AI Match: {prop['match_score']}%</span> {rel_pill} {portfolio_pill}</div>
                     </div>
                     <div style="text-align:right; font-size:13px; color:#059669; font-weight:700;">Status: {prop['status']}</div>
                 </div>
@@ -940,7 +1046,7 @@ elif st.session_state['user_role'] == 'Government Official':
                         <span>💰 <strong>Bid:</strong> <code style="color:#4f46e5;">{prop['bid']}</code></span>
                         <span>⏱️ <strong>Duration:</strong> <code>{prop['duration']}</code></span>
                         <span>🏷️ <strong>TRL:</strong> <code>TRL {prop['trl']}</code></span>
-                        <span>📁 <strong>Past Work:</strong> <code>{prop.get('past_work_ref','Attached')}</code></span>
+                        <span>📁 <strong>Linked Past Work:</strong> <code>{prop.get('past_work_ref','Attached')}</code></span>
                     </div>
                 </div>
             """, unsafe_allow_html=True)
@@ -948,6 +1054,9 @@ elif st.session_state['user_role'] == 'Government Official':
             with st.expander("🔍 View Eligibility Self-Certification Checklist"):
                 for k, v in prop.get('eligibility_check', {}).items():
                     st.write(("✅ " if v else "❌ ") + k)
+                if rel_score is not None:
+                    st.markdown(f"**Portfolio Relevance Score:** {rel_score}% — {relevance_label(rel_score)[0]}")
+                    st.progress(rel_score / 100.0)
 
             c_a1, c_a2, _ = st.columns([1.2, 1.2, 2])
             with c_a1:
@@ -1127,7 +1236,10 @@ elif st.session_state['user_role'] == 'Startup Founder':
 
     elif st.session_state['active_page'] == 'Submit Proposal':
         st.markdown("# 📝 **Submit Innovative Pilot Solution Proposal**")
-        st.markdown("Step 1 self-certifies eligibility (per SIH26136's requirement for a transparent screening step); Step 2 captures your technical solution.")
+        st.markdown("Step 1 self-certifies eligibility; Step 2 checks your portfolio strength & relevance; Step 3 captures your technical solution.")
+
+        my_dept = st.session_state['user_dept']
+        my_past_works = [pw for pw in st.session_state['startup_past_works'] if pw['startup_name'] == my_dept]
 
         st.markdown("### ✅ **Step 1 — Eligibility Self-Certification**")
         ec1, ec2 = st.columns(2)
@@ -1143,13 +1255,67 @@ elif st.session_state['user_role'] == 'Startup Founder':
         else:
             st.warning("⚠️ One or more eligibility conditions are unmet. You can still submit, but it will be flagged for manual government review.")
 
-        st.markdown("### 📝 **Step 2 — Proposal Details**")
+        # ---------------------------------------------------------------
+        # STEP 2 — PORTFOLIO GATE: minimum track record required to apply
+        # ---------------------------------------------------------------
+        st.markdown("### 📁 **Step 2 — Portfolio Strength & Relevance Check**")
+        pg1, pg2 = st.columns([1, 2])
+        with pg1:
+            gate_ok = len(my_past_works) >= MIN_PORTFOLIO_PROJECTS
+            st.markdown(f"""
+            <div class="stat-box" style="border-color:{'#86efac' if gate_ok else '#fecaca'};">
+                <div class="stat-label">Verified Past Projects</div>
+                <div class="stat-val" style="color:{'#059669' if gate_ok else '#dc2626'};">{len(my_past_works)} / {MIN_PORTFOLIO_PROJECTS} required</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with pg2:
+            if gate_ok:
+                st.success(f"✅ Portfolio requirement met — you have {len(my_past_works)} verified past project(s) on file (minimum {MIN_PORTFOLIO_PROJECTS} required to apply for any pilot).")
+            else:
+                st.error(f"🚫 You need at least **{MIN_PORTFOLIO_PROJECTS} verified past projects** in your portfolio before you can submit a pilot proposal. You currently have **{len(my_past_works)}**.")
+                st.info("Go to **📁 My Past Works & Portfolio → Upload New Past Work** to add more verified project proof, then return here.")
+
+        if not gate_ok:
+            st.stop()
+
+        # Challenge selector lives OUTSIDE the form so relevance updates live as it changes
+        p_ch_target = st.selectbox("🎯 Select Target Problem Statement", [f"{c['id']} — {c['title']}" for c in st.session_state['challenges']], key="prop_ch_select")
+        target_ch_id = p_ch_target.split(' — ')[0]
+        target_challenge = next((c for c in st.session_state['challenges'] if c['id'] == target_ch_id), None)
+
+        relevance_rows = []
+        for pw in my_past_works:
+            score, breakdown = compute_relevance_score(target_challenge, pw)
+            relevance_rows.append((pw, score, breakdown))
+        relevance_rows.sort(key=lambda r: r[1], reverse=True)
+        best_pw, best_score, best_breakdown = relevance_rows[0] if relevance_rows else (None, 0, {})
+
+        st.markdown("**🔎 Portfolio Relevance to this Challenge:**")
+        for pw, score, breakdown in relevance_rows:
+            label, cls = relevance_label(score)
+            kw_txt = ", ".join(breakdown.get('shared_keywords', [])) or "—"
+            st.markdown(f"""
+            <div style="background:#ffffff; border:1.5px solid #eef2ff; border-radius:12px; padding:12px 16px; margin-bottom:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:700; color:#1e1b4b;">{pw['title']}</span>
+                    <span class="pill-tag {cls}">{label} · {score}%</span>
+                </div>
+                <div style="font-size:13px; color:#64748b; margin-top:4px;">Sector match: {'✅ ' + pw['sector'] if breakdown.get('sector_match') else '❌ ' + pw.get('sector','—') + ' ≠ ' + (target_challenge['sector'] if target_challenge else '—')} · Shared keywords: {kw_txt}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        if best_score < 35:
+            st.warning(f"⚠️ None of your portfolio projects are strongly relevant to **{target_challenge['sector'] if target_challenge else 'this challenge'}**. Your proposal can still be submitted, but it will be auto-flagged for manual relevance review by the department.")
+        else:
+            st.success(f"✅ Best portfolio match: **{best_pw['title']}** ({best_score}% relevant) — this will be attached as your supporting proof.")
+
+        st.markdown("### 📝 **Step 3 — Proposal Details**")
         with st.form("st_proposal_form"):
             st.markdown("#### 🏢 Startup Information")
             p1, p2 = st.columns(2)
             with p1:
                 p_name = st.text_input("Startup Entity Name", value=st.session_state['user_dept'])
-                p_ch_target = st.selectbox("Select Target Problem Statement", [f"{c['id']} — {c['title']}" for c in st.session_state['challenges']])
+                st.text_input("Target Problem Statement", value=p_ch_target, disabled=True)
             with p2:
                 p_trl = st.selectbox("Demonstrated TRL", ["TRL 8: System Qualified & Ready for Operational Pilot", "TRL 7: System Prototype Demonstration in Operational Environment", "TRL 6: Technology Demonstrated in Relevant Environment", "TRL 9: Full Mission Proven"])
                 p_bid = st.selectbox("Proposed Fast-Track Grant Bid", ["₹18,50,000", "₹23,50,000", "₹29,00,000", "₹35,00,000"])
@@ -1162,7 +1328,9 @@ elif st.session_state['user_role'] == 'Startup Founder':
             with up1:
                 st.file_uploader("📄 Upload Pitch Deck / Architecture Drawing (PDF)", type=["pdf", "docx"])
             with up2:
-                st.selectbox("Link Existing Verified Past Work from Portfolio:", ["None (New Application)"] + [pw['title'] for pw in st.session_state['startup_past_works']])
+                pw_options = [pw['title'] for pw in my_past_works]
+                default_idx = pw_options.index(best_pw['title']) if best_pw and best_pw['title'] in pw_options else 0
+                p_linked_work = st.selectbox("Link Relevant Past Work as Proof:", pw_options, index=default_idx if pw_options else 0)
 
             st.markdown("#### 🔐 Compliance Acknowledgement")
             ack_ip = st.checkbox("We accept the standard Data Sharing & IP Ownership Clause (see Templates Library)")
@@ -1170,32 +1338,49 @@ elif st.session_state['user_role'] == 'Startup Founder':
 
             submit_prop_btn = st.form_submit_button("🚀 Submit Pilot Proposal to Government Committee →", type="primary", use_container_width=True)
             if submit_prop_btn:
-                elig_label = "Eligible ✅" if elig_all else "Flagged for Manual Review ⚠️"
+                relevance_flag = "Relevant ✅" if best_score >= 35 else "Flagged — Low Relevance ⚠️"
+                elig_label = "Eligible ✅" if (elig_all and best_score >= 35) else "Flagged for Manual Review ⚠️"
                 st.session_state['proposals'].append({
                     'id': f"PROP-{100 + len(st.session_state['proposals']) + 1}",
-                    'challenge_id': p_ch_target.split(' — ')[0], 'challenge_title': p_ch_target.split(' — ', 1)[-1],
+                    'challenge_id': target_ch_id, 'challenge_title': p_ch_target.split(' — ', 1)[-1],
                     'startup_name': p_name, 'founder_email': st.session_state['user_email'],
                     'dpiit_id': USERS_DB.get(st.session_state['user_email'], {}).get('dpiit_id', 'PENDING'),
                     'bid': p_bid, 'duration': '3 Months', 'trl': int(p_trl.split(':')[0].replace('TRL', '').strip()),
                     'match_score': 90, 'status': 'Under Technical Committee Review', 'submitted_date': datetime.now().strftime('%Y-%m-%d'),
-                    'solution': p_tech, 'proof_attachment': 'Uploaded_Pitch_Deck.pdf', 'past_work_ref': 'Linked from Portfolio',
+                    'solution': p_tech, 'proof_attachment': 'Uploaded_Pitch_Deck.pdf', 'past_work_ref': p_linked_work if my_past_works else 'None on file',
                     'eligibility_check': {'DPIIT Recognised': e_dpiit, 'Turnover under cap': e_turnover, 'Indian-owned & controlled': e_owned, 'Sector fit confirmed': e_sector},
                     'eligibility_status': elig_label,
+                    'portfolio_relevance_score': best_score, 'portfolio_relevance_status': relevance_flag,
+                    'portfolio_project_count': len(my_past_works),
                     'milestones': [
                         {'num': 1, 'title': 'Pilot Deployment & Baseline', 'amount': p_bid, 'status': 'Awaiting Work Order', 'proof': 'Not started.', 'validator': None},
                         {'num': 2, 'title': 'Mid-Pilot Verification', 'amount': p_bid, 'status': 'Awaiting Work Order', 'proof': 'Not started.', 'validator': None},
                         {'num': 3, 'title': 'Final Outcome & Handover', 'amount': p_bid, 'status': 'Awaiting Work Order', 'proof': 'Not started.', 'validator': None},
                     ]
                 })
-                st.success(f"🎉 Proposal submitted! Eligibility status: **{elig_label}**. AI Match Score calculated: **96% Match**.")
+                st.success(f"🎉 Proposal submitted! Eligibility status: **{elig_label}**. Portfolio Relevance: **{best_score}%**. AI Match Score calculated: **96% Match**.")
                 st.balloons()
 
     elif st.session_state['active_page'] == 'Startup Portfolio':
         st.markdown("# 📁 **Startup Previous Works & Execution Portfolio**")
         st.markdown("Upload past government work orders, completion certificates, and patents to increase proposal credibility score.")
-        tab_showcase, tab_upload = st.tabs(["🏆 Verified Past Works Showcase", "📤 Upload New Past Work / Project Proof"])
+
+        my_dept = st.session_state['user_dept']
+        my_works = [pw for pw in st.session_state['startup_past_works'] if pw['startup_name'] == my_dept]
+
+        gate_ok = len(my_works) >= MIN_PORTFOLIO_PROJECTS
+        st.markdown(f"""
+        <div class="stat-box" style="border-color:{'#86efac' if gate_ok else '#fecaca'}; margin-bottom:18px;">
+            <div class="stat-label">Portfolio Eligibility to Apply for Pilots</div>
+            <div class="stat-val" style="color:{'#059669' if gate_ok else '#dc2626'};">{len(my_works)} / {MIN_PORTFOLIO_PROJECTS} verified projects {'✅' if gate_ok else '— add more to unlock proposals'}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        tab_showcase, tab_upload, tab_perf = st.tabs(["🏆 Verified Past Works Showcase", "📤 Upload New Past Work / Project Proof", "📊 Company Performance Analytics"])
         with tab_showcase:
-            for pw in st.session_state['startup_past_works']:
+            if not my_works:
+                st.info("No verified past works on file yet. Add at least 3 to unlock pilot proposal submission.")
+            for pw in my_works:
                 st.markdown(f"""
                 <div class="portfolio-card">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
@@ -1213,6 +1398,60 @@ elif st.session_state['user_role'] == 'Startup Founder':
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+        with tab_perf:
+            st.markdown("### 📊 **Company Performance Overview**")
+            if len(my_works) == 0:
+                st.info("Add verified past projects to see your performance analytics.")
+            else:
+                def _trl_num(s):
+                    try:
+                        return int(''.join(ch for ch in s.split(':')[0] if ch.isdigit()) or 7)
+                    except Exception:
+                        return 7
+                def _year_num(s):
+                    digits = ''.join(ch for ch in str(s)[:4] if ch.isdigit())
+                    return int(digits) if digits else 2025
+
+                perf_df = pd.DataFrame({
+                    'Project': [pw['title'][:28] + ('…' if len(pw['title']) > 28 else '') for pw in my_works],
+                    'TRL': [_trl_num(pw['trl_demonstrated']) for pw in my_works],
+                    'Sector': [pw['sector'] for pw in my_works],
+                    'Year': [_year_num(pw['year']) for pw in my_works],
+                })
+
+                avg_trl = perf_df['TRL'].mean()
+                sector_diversity = perf_df['Sector'].nunique()
+                strength_score = min(100, round((len(my_works) / MIN_PORTFOLIO_PROJECTS) * 40 + (avg_trl / 9) * 40 + sector_diversity * 10))
+
+                m1, m2, m3, m4 = st.columns(4)
+                with m1: st.metric("📁 Total Verified Projects", len(my_works))
+                with m2: st.metric("🏷️ Average TRL", f"{avg_trl:.1f} / 9")
+                with m3: st.metric("🧭 Sector Diversity", f"{sector_diversity} sector(s)")
+                with m4: st.metric("💪 Portfolio Strength Score", f"{strength_score} / 100")
+
+                pc1, pc2 = st.columns(2)
+                with pc1:
+                    fig_trl = px.bar(perf_df, x='Project', y='TRL', color='TRL', range_y=[0, 9],
+                                      title="Technology Readiness Level by Project", color_continuous_scale=['#c7d2fe', '#4338ca'])
+                    fig_trl.update_layout(template='plotly_white', height=340, paper_bgcolor='rgba(0,0,0,0)', xaxis_tickangle=-20)
+                    st.plotly_chart(fig_trl, use_container_width=True)
+                with pc2:
+                    sec_counts = perf_df['Sector'].value_counts().reset_index()
+                    sec_counts.columns = ['Sector', 'Projects']
+                    fig_sec = px.pie(sec_counts, values='Projects', names='Sector', hole=0.55,
+                                      title="Project Portfolio by Sector",
+                                      color_discrete_sequence=['#60a5fa', '#a78bfa', '#f472b6', '#34d399', '#fbbf24'])
+                    fig_sec.update_layout(template='plotly_white', height=340, paper_bgcolor='rgba(0,0,0,0)')
+                    st.plotly_chart(fig_sec, use_container_width=True)
+
+                timeline_df = perf_df.groupby('Year').size().reset_index(name='Projects Delivered').sort_values('Year')
+                timeline_df['Cumulative Projects'] = timeline_df['Projects Delivered'].cumsum()
+                fig_line = px.line(timeline_df, x='Year', y='Cumulative Projects', markers=True,
+                                    title="Cumulative Project Delivery Over Time", color_discrete_sequence=['#6366f1'])
+                fig_line.update_layout(template='plotly_white', height=300, paper_bgcolor='rgba(0,0,0,0)')
+                st.plotly_chart(fig_line, use_container_width=True)
+
+                st.caption("💡 This performance profile is shown to government evaluators alongside your proposal to support the eligibility & relevance review.")
         with tab_upload:
             with st.form("add_work_form"):
                 pw_title = st.text_input("Project / Solution Title", placeholder="e.g. Drone Road Condition Mapping for Thane Municipal Corp")
