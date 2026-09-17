@@ -1,6 +1,6 @@
 """
 💡 Narsby • Live Startup Public Procurement Platform
-Smart India Hackathon 2026 | Problem Statement: SIH26136 (Govt of Maharashtra)
+Smart India Hackathon 2026 | Problem Statement: SIH26136
 Framework: Sandbox Under GFR Rule 194 | Identify -> Pilot -> Validate -> Scale
 """
 
@@ -29,10 +29,10 @@ LOGO_FULL_B64 = _img_b64(LOGO_FULL)
 LOGO_ICON_B64 = _img_b64(LOGO_ICON)
 
 # -----------------------------------------------------------------------------
-# 1. PAGE SETUP & ENERGETIC, COLOURFUL, BIG-FONT DESIGN SYSTEM
+# 1. PAGE SETUP & EXTRA-LARGE TYPOGRAPHY WITH VIBRANT FILLED BUTTONS
 # -----------------------------------------------------------------------------
 st.set_page_config(
-    page_title="Narsby • Maharashtra Startup Procurement Sandbox",
+    page_title="Narsby • Startup Public Procurement Platform",
     page_icon=(LOGO_ICON if os.path.isfile(LOGO_ICON) else "💡"),
     layout="wide",
     initial_sidebar_state="expanded"
@@ -40,205 +40,240 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@700;800;900&display=swap');
 
+    /* Global Big Text Typography */
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #0f172a;
-        font-size: 18px;
+        font-size: 21px !important;
     }
-    h1 { font-family: 'Space Grotesk', sans-serif !important; font-size: 38px !important; font-weight: 800 !important; }
-    h2 { font-family: 'Space Grotesk', sans-serif !important; font-size: 30px !important; font-weight: 800 !important; color: #1e1b4b !important; }
-    h3 { font-family: 'Space Grotesk', sans-serif !important; font-size: 24px !important; font-weight: 700 !important; color: #312e81 !important; }
-    p, span, label, div { font-size: 17.5px; line-height: 1.7; }
+    h1 { font-family: 'Space Grotesk', sans-serif !important; font-size: 44px !important; font-weight: 900 !important; line-height: 1.2 !important; }
+    h2 { font-family: 'Space Grotesk', sans-serif !important; font-size: 34px !important; font-weight: 800 !important; color: #1e1b4b !important; line-height: 1.3 !important; }
+    h3 { font-family: 'Space Grotesk', sans-serif !important; font-size: 28px !important; font-weight: 800 !important; color: #312e81 !important; }
+    p, span, label, div { font-size: 20px !important; line-height: 1.75; }
 
-    /* Multi-Color Light Theme Canvas */
+    /* Vibrant Background Canvas */
     [data-testid="stAppViewContainer"], .stApp, body {
         background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 50%, #f0fdf4 100%) !important;
     }
     [data-testid="stHeader"] { background: rgba(0,0,0,0) !important; }
     [data-testid="stSidebar"], section[data-testid="stSidebar"] > div {
         background: linear-gradient(180deg, #ffffff 0%, #eef2ff 60%, #fae8ff 100%) !important;
-        border-right: 2px solid #e0e7ff;
+        border-right: 3px solid #cbd5e1;
     }
     [data-testid="stMainBlockContainer"], .main .block-container {
         background: transparent !important;
-        padding-top: 1.5rem !important;
+        padding-top: 1.8rem !important;
     }
 
-    /* Widget Surfaces */
+    /* Big Form Surfaces & Cards */
     [data-testid="stExpander"], [data-testid="stForm"] {
         background: #ffffff !important;
-        border-radius: 18px !important;
-        border: 2px solid #e2e8f0 !important;
-        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.05) !important;
-        padding: 24px !important;
+        border-radius: 20px !important;
+        border: 2.5px solid #cbd5e1 !important;
+        box-shadow: 0 14px 30px rgba(99, 102, 241, 0.08) !important;
+        padding: 28px !important;
     }
-    .stTabs [data-baseweb="tab-list"] { background: transparent !important; gap: 8px; }
+    .stTabs [data-baseweb="tab-list"] { background: transparent !important; gap: 10px; }
     .stTabs [data-baseweb="tab"] {
         background: #ffffff !important; 
-        border-radius: 12px 12px 0 0 !important;
-        border: 2px solid #e2e8f0 !important; 
-        color: #334155 !important; 
+        border-radius: 14px 14px 0 0 !important;
+        border: 2.5px solid #cbd5e1 !important; 
+        color: #1e293b !important; 
         font-weight: 800 !important;
-        font-size: 18px !important;
-        padding: 10px 24px !important;
+        font-size: 21px !important;
+        padding: 14px 28px !important;
     }
     .stTabs [aria-selected="true"] {
         background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
         color: #ffffff !important;
         border-color: #4f46e5 !important;
     }
-    .stTabs [aria-selected="true"] p { color: #ffffff !important; }
+    .stTabs [aria-selected="true"] p { color: #ffffff !important; font-weight: 900 !important; font-size: 21px !important; }
 
-    /* Inputs with Big Bold Typography */
+    /* Large High-Contrast Inputs */
     [data-testid="stTextInput"] input, [data-testid="stTextArea"] textarea, [data-testid="stSelectbox"] > div {
         background: #ffffff !important; 
-        border: 2px solid #cbd5e1 !important;
-        border-radius: 12px !important;
-        font-size: 17.5px !important;
-        font-weight: 600 !important;
+        border: 2.5px solid #94a3b8 !important;
+        border-radius: 14px !important;
+        font-size: 20px !important;
+        font-weight: 700 !important;
         color: #0f172a !important;
+        padding: 12px 16px !important;
     }
     [data-testid="stTextInput"] input:focus, [data-testid="stTextArea"] textarea:focus {
-        border-color: #6366f1 !important;
-        box-shadow: 0 0 0 3px rgba(99,102,241,0.2) !important;
+        border-color: #4f46e5 !important;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.25) !important;
     }
     [data-testid="stWidgetLabel"] p, [data-testid="stWidgetLabel"] label { 
         color: #0f172a !important; 
-        font-weight: 800 !important; 
-        font-size: 17.5px !important;
+        font-weight: 900 !important; 
+        font-size: 20px !important;
+        margin-bottom: 6px !important;
     }
 
-    /* Buttons */
+    /* ALL BUTTONS FILLED WITH VIBRANT COLOURS & BIG TEXT */
     .stButton > button {
-        font-size: 17.5px !important;
-        font-weight: 800 !important;
-        padding: 12px 28px !important;
-        border-radius: 14px !important;
+        font-size: 20px !important;
+        font-weight: 900 !important;
+        padding: 14px 32px !important;
+        border-radius: 16px !important;
         transition: all 0.25s ease !important;
+        border: none !important;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12) !important;
     }
+    /* Primary buttons: Electric Indigo / Purple filled */
     .stButton > button[kind="primary"] {
         background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
-        border: none !important;
         color: #ffffff !important;
-        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3) !important;
     }
     .stButton > button[kind="primary"]:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 28px rgba(79, 70, 229, 0.45) !important;
+        transform: translateY(-3px) scale(1.01);
+        box-shadow: 0 14px 30px rgba(79, 70, 229, 0.45) !important;
+        background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%) !important;
     }
+    /* Secondary buttons: Solid Bright Sky Blue / Slate filled */
     .stButton > button[kind="secondary"] {
-        background: #ffffff !important;
-        border: 2px solid #cbd5e1 !important;
-        color: #1e1b4b !important;
+        background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
+        color: #ffffff !important;
+    }
+    .stButton > button[kind="secondary"]:hover {
+        transform: translateY(-3px) scale(1.01);
+        box-shadow: 0 14px 30px rgba(2, 132, 199, 0.45) !important;
+        background: linear-gradient(135deg, #0369a1 0%, #1d4ed8 100%) !important;
     }
 
-    /* Stat Cards */
+    /* Download and File Uploader Filled Accent */
+    [data-testid="stFileUploader"] {
+        background: #f8fafc !important;
+        border: 3px dashed #6366f1 !important;
+        border-radius: 18px !important;
+        padding: 20px !important;
+    }
+    [data-testid="stFileUploaderDropzone"] button {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        font-size: 19px !important;
+        border-radius: 14px !important;
+        padding: 10px 24px !important;
+        border: none !important;
+    }
+    [data-testid="stDownloadButton"] button {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+        color: #ffffff !important;
+        font-weight: 900 !important;
+        font-size: 20px !important;
+        border-radius: 16px !important;
+        border: none !important;
+    }
+
+    /* Stat Cards with Huge Numbers */
     .stat-card-vibrant {
-        border-radius: 18px;
-        padding: 22px 24px;
+        border-radius: 22px;
+        padding: 26px 28px;
         color: #ffffff;
-        box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.12);
         transition: transform 0.2s ease;
     }
-    .stat-card-vibrant:hover { transform: translateY(-4px); }
-    .stat-blue { background: linear-gradient(135deg, #2563eb 0%, #38bdf8 100%); }
-    .stat-purple { background: linear-gradient(135deg, #7c3aed 0%, #c084fc 100%); }
-    .stat-green { background: linear-gradient(135deg, #059669 0%, #34d399 100%); }
-    .stat-amber { background: linear-gradient(135deg, #d97706 0%, #fbbf24 100%); }
-    .stat-num { font-size: 38px; font-weight: 900; font-family: 'Space Grotesk', sans-serif; }
-    .stat-desc { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.95; }
+    .stat-card-vibrant:hover { transform: translateY(-5px); }
+    .stat-blue { background: linear-gradient(135deg, #1d4ed8 0%, #0284c7 100%); }
+    .stat-purple { background: linear-gradient(135deg, #6d28d9 0%, #a855f7 100%); }
+    .stat-green { background: linear-gradient(135deg, #047857 0%, #10b981 100%); }
+    .stat-amber { background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%); }
+    .stat-num { font-size: 46px !important; font-weight: 900 !important; font-family: 'Space Grotesk', sans-serif; line-height: 1.1; }
+    .stat-desc { font-size: 18px !important; font-weight: 800 !important; text-transform: uppercase; letter-spacing: 0.9px; opacity: 0.95; margin-bottom: 6px; }
 
     /* Hero Banners */
     .hero-banner-public {
-        background: linear-gradient(125deg, #e0e7ff 0%, #fae8ff 45%, #dcfce7 100%);
-        border-radius: 26px;
-        padding: 36px 40px;
-        border: 2.5px solid #c7d2fe;
-        box-shadow: 0 16px 36px rgba(99, 102, 241, 0.12);
-        margin-bottom: 22px;
+        background: linear-gradient(125deg, #dbeafe 0%, #fae8ff 45%, #dcfce7 100%);
+        border-radius: 28px;
+        padding: 42px 46px;
+        border: 3px solid #bfdbfe;
+        box-shadow: 0 18px 40px rgba(99, 102, 241, 0.14);
+        margin-bottom: 26px;
     }
     .hero-banner-gov {
         background: linear-gradient(125deg, #dbeafe 0%, #e0e7ff 50%, #ede9fe 100%);
-        border-radius: 26px;
-        padding: 38px 42px;
-        border: 2.5px solid #bfdbfe;
-        box-shadow: 0 16px 36px rgba(59, 130, 246, 0.14);
-        margin-bottom: 24px;
+        border-radius: 28px;
+        padding: 40px 44px;
+        border: 3px solid #bfdbfe;
+        box-shadow: 0 18px 40px rgba(59, 130, 246, 0.16);
+        margin-bottom: 26px;
     }
     .hero-banner-startup {
         background: linear-gradient(125deg, #fae8ff 0%, #fce7f3 50%, #ede9fe 100%);
-        border-radius: 26px;
-        padding: 38px 42px;
-        border: 2.5px solid #f5d0fe;
-        box-shadow: 0 16px 36px rgba(192, 38, 211, 0.12);
-        margin-bottom: 24px;
+        border-radius: 28px;
+        padding: 40px 44px;
+        border: 3px solid #f5d0fe;
+        box-shadow: 0 18px 40px rgba(192, 38, 211, 0.14);
+        margin-bottom: 26px;
     }
-    .hero-title { font-size: 34px; font-weight: 900; color: #1e1b4b; letter-spacing: -0.8px; margin-bottom: 10px; font-family: 'Space Grotesk', sans-serif; }
-    .hero-subtitle { font-size: 18px; color: #334155; font-weight: 600; line-height: 1.6; margin-bottom: 12px; }
-    .hero-pill { background: #ffffff; padding: 6px 16px; border-radius: 30px; font-weight: 800; font-size: 14.5px; color: #4338ca; border: 1.5px solid #c7d2fe; display: inline-block; }
+    .hero-title { font-size: 42px !important; font-weight: 900 !important; color: #1e1b4b; letter-spacing: -0.8px; margin-bottom: 14px; font-family: 'Space Grotesk', sans-serif; }
+    .hero-subtitle { font-size: 22px !important; color: #1e293b; font-weight: 700; line-height: 1.6; margin-bottom: 16px; }
+    .hero-pill { background: #ffffff; padding: 8px 20px; border-radius: 40px; font-weight: 900; font-size: 17px !important; color: #4338ca; border: 2px solid #a5b4fc; display: inline-block; }
 
-    /* Card Items */
+    /* Item Box */
     .item-box {
         background: #ffffff;
-        border: 2px solid #e2e8f0;
-        border-radius: 20px;
-        padding: 24px 28px;
-        margin-bottom: 20px;
-        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.06);
-        transition: border-color 0.25s ease, transform 0.2s ease;
+        border: 2.5px solid #cbd5e1;
+        border-radius: 22px;
+        padding: 28px 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 28px rgba(99, 102, 241, 0.08);
+        transition: all 0.25s ease;
     }
     .item-box:hover {
-        border-color: #818cf8;
-        transform: translateY(-3px);
-        box-shadow: 0 14px 32px rgba(99, 102, 241, 0.12);
+        border-color: #6366f1;
+        transform: translateY(-4px);
+        box-shadow: 0 16px 36px rgba(99, 102, 241, 0.16);
     }
     .pill-tag {
         display: inline-block;
-        padding: 6px 16px;
-        border-radius: 30px;
-        font-size: 14px;
-        font-weight: 800;
-        letter-spacing: 0.3px;
-        margin-right: 8px;
+        padding: 8px 20px;
+        border-radius: 40px;
+        font-size: 16px !important;
+        font-weight: 900;
+        letter-spacing: 0.4px;
+        margin-right: 10px;
     }
-    .tag-water { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
-    .tag-drone { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
-    .tag-health { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-    .tag-agri { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
-    .tag-gov { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-    .tag-eligible { background: #ccfbf1; color: #115e59; border: 1.5px solid #5eead4; }
+    .tag-water { background: #dbeafe; color: #1e40af; border: 1.5px solid #93c5fd; }
+    .tag-drone { background: #ede9fe; color: #5b21b6; border: 1.5px solid #c4b5fd; }
+    .tag-health { background: #fee2e2; color: #991b1b; border: 1.5px solid #fca5a5; }
+    .tag-agri { background: #dcfce7; color: #166534; border: 1.5px solid #86efac; }
+    .tag-gov { background: #fef3c7; color: #92400e; border: 1.5px solid #fcd34d; }
+    .tag-eligible { background: #ccfbf1; color: #115e59; border: 2px solid #2dd4bf; }
 
     .login-container {
         background: #ffffff;
-        border-radius: 24px;
-        border: 2.5px solid #e0e7ff;
-        padding: 34px 38px;
-        box-shadow: 0 20px 48px rgba(79, 70, 229, 0.12);
+        border-radius: 26px;
+        border: 3px solid #c7d2fe;
+        padding: 38px 42px;
+        box-shadow: 0 22px 52px rgba(79, 70, 229, 0.14);
     }
 </style>
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# 2. IN-MEMORY DATA STORAGE
+# 2. IN-MEMORY DATA STORAGE (UNIVERSAL & MAHARASHTRA-FREE)
 # -----------------------------------------------------------------------------
 USERS_DB = {
-    "rajesh.sharma@maharashtra.gov.in": {
+    "rajesh.sharma@gov.in": {
         "password": "gov123", "name": "Dr. Rajesh Sharma (IAS)", "role": "Government Official",
-        "dept": "Water Supply & Sanitation Dept, Govt of Maharashtra", "avatar": "🏛️"
+        "dept": "Water Supply & Sanitation Department", "avatar": "🏛️"
     },
-    "urban.dev@maharashtra.gov.in": {
+    "urban.dev@gov.in": {
         "password": "gov123", "name": "Smt. Manisha Verma (IAS)", "role": "Government Official",
-        "dept": "Urban Development & Smart Cities, Govt of Maharashtra", "avatar": "🏛️"
+        "dept": "Urban Development & Smart Cities Mission", "avatar": "🏛️"
     },
     "founder@jaldrishti.io": {
         "password": "startup123", "name": "Ananya Deshmukh (Founder & CEO)", "role": "Startup Founder",
-        "dept": "JalDrishti IoT Pvt Ltd", "dpiit_id": "DIPP-MH-44512", "avatar": "🚀"
+        "dept": "JalDrishti IoT Pvt Ltd", "dpiit_id": "DIPP-IN-44512", "avatar": "🚀"
     },
     "founder@aerovision.ai": {
         "password": "startup123", "name": "Karan Malhotra (CTO & Co-Founder)", "role": "Startup Founder",
-        "dept": "AeroVision AI Robotics Pvt Ltd", "dpiit_id": "DIPP-MH-88124", "avatar": "🚀"
+        "dept": "AeroVision AI Robotics Pvt Ltd", "dpiit_id": "DIPP-IN-88124", "avatar": "🚀"
     }
 }
 
@@ -254,58 +289,58 @@ if 'initialized' not in st.session_state:
     st.session_state['challenges'] = [
         {
             'id': 'CH-01', 'title': 'Smart Water Pipeline Subterranean Acoustic Leakage Detection',
-            'dept': 'Water Supply & Sanitation Dept', 'sector': 'Water & Smart City', 'tag': 'water',
+            'dept': 'Water Supply & Sanitation Department', 'sector': 'Water & Smart City', 'tag': 'water',
             'budget': '₹25 Lakhs', 'budget_val': 25, 'duration': '3 Months',
             'target_kpi': 'Reduce subterranean water loss by ≥ 25% with sub-2m spatial accuracy',
             'description': 'Municipal water networks lose over 35% as non-revenue water. Deploy non-invasive IoT acoustic clamp sensors to detect bursts without tearing up roadways.',
             'posted_by': 'Dr. Rajesh Sharma (IAS)', 'date_posted': '2026-02-10', 'status': 'Active (Accepting Proposals)',
-            'district': 'Pune Division', 'proposals_count': 3
+            'district': 'Metro Central Division', 'proposals_count': 3
         },
         {
             'id': 'CH-02', 'title': 'Automated Aerial Drone Pothole & Road Distress Survey',
-            'dept': 'Urban Development & Smart Cities', 'sector': 'AI & Drone Mobility', 'tag': 'drone',
+            'dept': 'Urban Development & Smart Cities Mission', 'sector': 'AI & Drone Mobility', 'tag': 'drone',
             'budget': '₹35 Lakhs', 'budget_val': 35, 'duration': '4 Months',
             'target_kpi': 'Survey 50 km/day with ≥ 92% automated road distress detection',
-            'description': 'Automated drone computer vision survey to map asphalt surface quality, detect potholes, and generate instant GIS work orders for PWD crews.',
+            'description': 'Automated drone computer vision survey to map asphalt surface quality, detect potholes, and generate instant GIS work orders for engineering crews.',
             'posted_by': 'Smt. Manisha Verma (IAS)', 'date_posted': '2026-02-14', 'status': 'Active (Accepting Proposals)',
-            'district': 'Thane & MMR Region', 'proposals_count': 4
+            'district': 'Urban Arterial Corridor', 'proposals_count': 4
         },
         {
             'id': 'CH-03', 'title': 'Edge-AI Rural PHC Portable Vital Screening Kiosk',
-            'dept': 'Public Health & Family Welfare', 'sector': 'HealthTech', 'tag': 'health',
+            'dept': 'Public Health & Family Welfare Department', 'sector': 'HealthTech', 'tag': 'health',
             'budget': '₹30 Lakhs', 'budget_val': 30, 'duration': '3 Months',
             'target_kpi': 'Under 4-min multi-vital patient triage with 100% offline edge capability',
-            'description': 'Battery-operated triage kiosk for remote Primary Health Centres with tele-ECG and automated cardiovascular risk grading for rural citizens.',
+            'description': 'Battery-operated triage kiosk for remote Primary Health Centres with tele-ECG and automated cardiovascular risk grading for citizens.',
             'posted_by': 'Dr. Nitin Patil (Director of Health)', 'date_posted': '2026-02-18', 'status': 'Active (Accepting Proposals)',
-            'district': 'Nagpur & Vidarbha', 'proposals_count': 2
+            'district': 'Eastern Rural Division', 'proposals_count': 2
         },
         {
             'id': 'CH-04', 'title': 'Hyper-Local Solar Optical Pest Early Warning Sensor Traps',
-            'dept': 'Agriculture & Farmers Welfare', 'sector': 'Agritech', 'tag': 'agri',
+            'dept': 'Agriculture & Farmers Welfare Department', 'sector': 'Agritech', 'tag': 'agri',
             'budget': '₹20 Lakhs', 'budget_val': 20, 'duration': '3 Months',
             'target_kpi': 'Advance warning ≥ 7 days before major crop infestation',
-            'description': 'Low-cost optical/acoustic insect traps with solar battery and vernacular Marathi SMS alerts for cotton & soybean growers.',
+            'description': 'Low-cost optical/acoustic insect traps with solar battery and vernacular SMS alerts for cotton & crop growers.',
             'posted_by': 'Shri. S. K. Kadam (Agri Commissioner)', 'date_posted': '2026-02-22', 'status': 'Active (Accepting Proposals)',
-            'district': 'Chhatrapati Sambhaji Nagar', 'proposals_count': 1
+            'district': 'Agricultural Belt', 'proposals_count': 1
         }
     ]
 
     st.session_state['proposals'] = [
         {
             'id': 'PROP-101', 'challenge_id': 'CH-01', 'challenge_title': 'Smart Water Pipeline Acoustic Leakage Detection',
-            'startup_name': 'JalDrishti IoT Pvt Ltd', 'founder_email': 'founder@jaldrishti.io', 'dpiit_id': 'DIPP-MH-44512',
+            'startup_name': 'JalDrishti IoT Pvt Ltd', 'founder_email': 'founder@jaldrishti.io', 'dpiit_id': 'DIPP-IN-44512',
             'bid': '₹23,50,000', 'bid_val': 23.5, 'duration': '3 Months', 'trl': 8, 'match_score': 96,
             'status': 'Work Order Issued (Pilot Live)', 'submitted_date': '2026-02-16',
             'solution': 'Piezoelectric acoustic clamp-on sensors with cellular NB-IoT telemetry to isolate underground water leaks with sub-2.0m precision.',
             'milestones': [
-                {'num': 1, 'title': 'Deploy 60 Sensor Nodes in Ward 4', 'amount': '₹7,05,000', 'status': 'Completed & Paid', 'proof': '60 GPS coordinates verified; telemetry latency < 3 min.', 'validator': 'Quality Council of India (QCI)'},
-                {'num': 2, 'title': 'Live Acoustic Leak Detection & Verification', 'amount': '₹9,40,000', 'status': 'Under Gov Review', 'proof': 'Identified 9 subterranean leaks. PWD repair crew confirmed 8 bursts.', 'validator': 'IIT-Bombay Technical Cell'},
+                {'num': 1, 'title': 'Deploy 60 Sensor Nodes in Pilot Ward', 'amount': '₹7,05,000', 'status': 'Completed & Paid', 'proof': '60 GPS coordinates verified; telemetry latency < 3 min.', 'validator': 'Quality Council of India (QCI)'},
+                {'num': 2, 'title': 'Live Acoustic Leak Detection & Verification', 'amount': '₹9,40,000', 'status': 'Under Gov Review', 'proof': 'Identified 9 subterranean leaks. Repair crew confirmed 8 bursts.', 'validator': 'National Technical Assessment Cell'},
                 {'num': 3, 'title': 'Municipal SCADA System Integration', 'amount': '₹7,05,000', 'status': 'Pending Stage 2', 'proof': 'API schema prepared.', 'validator': None}
             ]
         },
         {
             'id': 'PROP-102', 'challenge_id': 'CH-02', 'challenge_title': 'Automated Aerial Drone Pothole & Road Distress Survey',
-            'startup_name': 'AeroVision AI Robotics Pvt Ltd', 'founder_email': 'founder@aerovision.ai', 'dpiit_id': 'DIPP-MH-88124',
+            'startup_name': 'AeroVision AI Robotics Pvt Ltd', 'founder_email': 'founder@aerovision.ai', 'dpiit_id': 'DIPP-IN-88124',
             'bid': '₹31,00,000', 'bid_val': 31.0, 'duration': '4 Months', 'trl': 7, 'match_score': 92,
             'status': 'Under Technical Committee Review', 'submitted_date': '2026-02-24',
             'solution': 'Autonomous dual-spectrum camera drones with TensorRT edge AI for sub-5cm pothole classification and automated PWD GIS mapping.',
@@ -320,9 +355,9 @@ if 'initialized' not in st.session_state:
     st.session_state['scale_ups'] = [
         {
             'startup_name': 'JalDrishti IoT Pvt Ltd', 'solution_title': 'Acoustic IoT Water Leak Detection',
-            'origin_pilot': 'Pune Municipal Corporation', 'scale_targets': 'Nagpur, Nashik, Chhatrapati Sambhaji Nagar, Thane Municipal Corps',
+            'origin_pilot': 'Central Municipal Corporation', 'scale_targets': '4 Municipal Corporations & Smart Cities',
             'recommended_by': 'Dr. Rajesh Sharma (IAS)', 'date': '2026-03-01',
-            'impact_so_far': 'Saved 1.4M litres/day in Pune pilot; 28% water loss reduction.'
+            'impact_so_far': 'Saved 1.4M litres/day in pilot; 28% water loss reduction.'
         }
     ]
 
@@ -330,7 +365,7 @@ if 'initialized' not in st.session_state:
         {
             'title': '📋 Outcome-Based Problem Statement Template (GFR 194)',
             'desc': 'Standard format for departments to define challenges by measurable target KPIs rather than restrictive hardware specs.',
-            'content': """MAHARASHTRA STATE INNOVATION SANDBOX — GFR 194
+            'content': """PUBLIC INNOVATION SANDBOX — GFR 194
 1. Sponsoring Department & Officer:
 2. Core Operational Bottleneck:
 3. Target KPI (e.g., ≥25% efficiency gain in 90 days):
@@ -343,16 +378,16 @@ if 'initialized' not in st.session_state:
             'title': '🤝 Milestone Escrow & Tripartite Pilot Agreement',
             'desc': 'Legally-binding agreement linking every payout tranche to verified third-party audit clearances.',
             'content': """TRIPARTITE PILOT AGREEMENT — SANDBOX FRAMEWORK
-Parties: Procuring Dept | DPIIT Startup | Independent Auditor (QCI/IIT)
+Parties: Procuring Department | DPIIT Startup | Independent Auditor (QCI / Empanelled Cell)
 Disbursement Schedule:
 - Tranche 1 (30%): Baseline & Setup Verification
 - Tranche 2 (40%): Operational Milestone Clearance
-- Tranche 3 (30%): Final KPI Attainment & State Scale-Up Handover
+- Tranche 3 (30%): Final KPI Attainment & Scale-Up Handover
 """
         },
         {
             'title': '🛒 Post-Pilot Direct GeM Transition Pathway Note',
-            'desc': 'Legal framework exempting validated sandbox pilots from secondary L1 open bidding under Maharashtra GFR 194.',
+            'desc': 'Legal framework exempting validated sandbox pilots from secondary L1 open bidding under GFR 194.',
             'content': """POST-PILOT SCALE-UP TRANSITION PROTOCOL
 Step 1: Third-party auditor issues KPI Attainment Certificate.
 Step 2: Department Secretary issues Pilot Success Ratification.
@@ -371,11 +406,11 @@ Step 4: Department-wide multi-year rate contract execution.
     st.session_state['initialized'] = True
 
 # -----------------------------------------------------------------------------
-# 3. STATISTICAL VISUALIZATIONS (WITH UNIQUE KEYS TO PREVENT DUPLICATE ID CRASH)
+# 3. STATISTICAL VISUALIZATIONS (UNIQUE KEYS TO PREVENT DUPLICATES)
 # -----------------------------------------------------------------------------
 def render_rich_analytics(key_suffix="default"):
     st.markdown("## 📊 **Deep Statistical Analysis & Procurement Intelligence**")
-    st.caption("Empirical performance data, expenditure allocations, and turnaround metrics across Maharashtra departments.")
+    st.caption("Empirical performance data, expenditure allocations, and turnaround metrics across civic departments.")
 
     r1, r2 = st.columns(2)
     with r1:
@@ -389,29 +424,29 @@ def render_rich_analytics(key_suffix="default"):
             name='Conventional GFR Tender', 
             x=speed_df['Procurement Stage'], 
             y=speed_df['Conventional Tender (Days)'],
-            marker=dict(color='#cbd5e1', line=dict(color='#94a3b8', width=1.5)),
+            marker=dict(color='#94a3b8', line=dict(color='#64748b', width=1.5)),
             text=speed_df['Conventional Tender (Days)'],
             textposition='auto',
-            textfont=dict(size=14, family="Plus Jakarta Sans", color="#1e293b")
+            textfont=dict(size=16, family="Plus Jakarta Sans", color="#ffffff")
         ))
         fig_speed.add_trace(go.Bar(
             name='Narsby Innovation Sandbox (GFR 194)', 
             x=speed_df['Procurement Stage'], 
             y=speed_df['Narsby Sandbox (Days)'],
-            marker=dict(color='rgba(99, 102, 241, 0.95)', line=dict(color='#4338ca', width=1.5)),
+            marker=dict(color='#4f46e5', line=dict(color='#312e81', width=1.5)),
             text=speed_df['Narsby Sandbox (Days)'],
             textposition='auto',
-            textfont=dict(size=14, family="Plus Jakarta Sans", color="#ffffff")
+            textfont=dict(size=16, family="Plus Jakarta Sans", color="#ffffff")
         ))
         fig_speed.update_layout(
             title="⏱️ <b>Turnaround Speed: Conventional Tender vs Narsby (Days)</b>",
             barmode='group',
             template='plotly_white',
-            height=370,
+            height=390,
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(family="Plus Jakarta Sans", size=14, color="#0f172a"),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            font=dict(family="Plus Jakarta Sans", size=16, color="#0f172a"),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(size=15))
         )
         st.plotly_chart(fig_speed, use_container_width=True, key=f"chart_speed_{key_suffix}")
 
@@ -425,20 +460,20 @@ def render_rich_analytics(key_suffix="default"):
             values='Sanctioned Budget (Lakhs)', 
             names='Sector', 
             title="🥧 <b>Open Sandbox Grants Allocation by Sector (₹ Lakhs)</b>",
-            hole=0.6,
-            color_discrete_sequence=['#3b82f6', '#8b5cf6', '#ec4899', '#10b981']
+            hole=0.55,
+            color_discrete_sequence=['#2563eb', '#7c3aed', '#ec4899', '#059669']
         )
         fig_donut.update_traces(
             textposition='outside', 
             textinfo='percent+label',
-            textfont=dict(size=14, family="Plus Jakarta Sans", color="#0f172a")
+            textfont=dict(size=16, family="Plus Jakarta Sans", color="#0f172a")
         )
         fig_donut.update_layout(
             template='plotly_white', 
-            height=370, 
+            height=390, 
             paper_bgcolor='rgba(0,0,0,0)',
             showlegend=False,
-            font=dict(family="Plus Jakarta Sans", size=14, color="#0f172a")
+            font=dict(family="Plus Jakarta Sans", size=16, color="#0f172a")
         )
         st.plotly_chart(fig_donut, use_container_width=True, key=f"chart_donut_{key_suffix}")
 
@@ -450,24 +485,24 @@ def render_rich_analytics(key_suffix="default"):
             r=[92, 88, 95, 85, 96],
             theta=categories,
             fill='toself',
-            name='Pune Smart City',
-            line_color='#6366f1'
+            name='Central Smart City',
+            line_color='#4f46e5'
         ))
         fig_radar.add_trace(go.Scatterpolar(
             r=[82, 94, 80, 90, 89],
             theta=categories,
             fill='toself',
-            name='Thane Municipal Corp',
+            name='Metropolitan Council',
             line_color='#ec4899'
         ))
         fig_radar.update_layout(
-            title="🎯 <b>District Sandbox Maturity Index (Key Dimensions)</b>",
+            title="🎯 <b>Regional Sandbox Maturity Index (Key Dimensions)</b>",
             polar=dict(radialaxis=dict(visible=True, range=[0, 100])),
             showlegend=True,
             template='plotly_white',
-            height=380,
+            height=390,
             paper_bgcolor='rgba(0,0,0,0)',
-            font=dict(family="Plus Jakarta Sans", size=14, color="#0f172a")
+            font=dict(family="Plus Jakarta Sans", size=16, color="#0f172a")
         )
         st.plotly_chart(fig_radar, use_container_width=True, key=f"chart_radar_{key_suffix}")
 
@@ -488,20 +523,20 @@ def render_rich_analytics(key_suffix="default"):
             text='Challenge',
             title="🔬 <b>Technology Readiness Level (TRL) vs Grant Size (₹ Lakhs)</b>",
             color_discrete_sequence=['#2563eb', '#7c3aed', '#db2777', '#059669', '#d97706'],
-            size_max=40
+            size_max=42
         )
-        fig_bubble.update_traces(textposition='top center', textfont=dict(size=13, family="Plus Jakarta Sans"))
+        fig_bubble.update_traces(textposition='top center', textfont=dict(size=15, family="Plus Jakarta Sans"))
         fig_bubble.update_layout(
             template='plotly_white', 
-            height=380, 
+            height=390, 
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(family="Plus Jakarta Sans", size=14, color="#0f172a")
+            font=dict(family="Plus Jakarta Sans", size=16, color="#0f172a")
         )
         st.plotly_chart(fig_bubble, use_container_width=True, key=f"chart_bubble_{key_suffix}")
 
 # -----------------------------------------------------------------------------
-# 4. INTERACTIVE ROI & COST-BENEFIT SIMULATOR (WITH UNIQUE KEYS)
+# 4. INTERACTIVE ROI & COST-BENEFIT SIMULATOR
 # -----------------------------------------------------------------------------
 def render_cost_benefit_simulator(key_suffix="default"):
     st.markdown("## 🧮 **Interactive Public Procurement ROI Simulator**")
@@ -523,10 +558,10 @@ def render_cost_benefit_simulator(key_suffix="default"):
     with col2:
         st.markdown("#### 📈 Projected Public Dividend:")
         st.markdown(f"""
-        <div style="background: linear-gradient(135deg, #eef2ff 0%, #fae8ff 100%); border: 2px solid #c7d2fe; border-radius: 20px; padding: 26px; margin-bottom: 16px;">
-            <div style="font-size: 16px; font-weight: 800; color: #4338ca; text-transform: uppercase;">Direct Public Funds Saved</div>
-            <div style="font-size: 38px; font-weight: 900; color: #1e1b4b; font-family: 'Space Grotesk', sans-serif;">₹{total_savings:.2f} Lakhs</div>
-            <div style="font-size: 15px; color: #64748b; margin-top: 4px;">Saved via outcome-based milestone tranches instead of L1 upfront commitments.</div>
+        <div style="background: linear-gradient(135deg, #eef2ff 0%, #fae8ff 100%); border: 3px solid #c7d2fe; border-radius: 22px; padding: 28px; margin-bottom: 18px;">
+            <div style="font-size: 18px; font-weight: 900; color: #4338ca; text-transform: uppercase;">Direct Public Funds Saved</div>
+            <div style="font-size: 44px; font-weight: 900; color: #1e1b4b; font-family: 'Space Grotesk', sans-serif;">₹{total_savings:.2f} Lakhs</div>
+            <div style="font-size: 18px; color: #475569; margin-top: 6px;">Saved via outcome-based milestone tranches instead of L1 upfront commitments.</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -540,7 +575,7 @@ def render_cost_benefit_simulator(key_suffix="default"):
 # 5. PUBLIC TRANSPARENCY VIEWS
 # -----------------------------------------------------------------------------
 def render_public_overview():
-    st.markdown("## 🌍 **Maharashtra Civic Innovation Metrics**")
+    st.markdown("## 🌍 **Civic Innovation Metrics**")
     
     s1, s2, s3, s4 = st.columns(4)
     with s1:
@@ -548,7 +583,7 @@ def render_public_overview():
         <div class="stat-card-vibrant stat-blue">
             <div class="stat-desc">Active Challenges</div>
             <div class="stat-num">{len(st.session_state['challenges'])}</div>
-            <div style="font-size:14px; opacity:0.9;">Across 4 Key Ministries</div>
+            <div style="font-size:16px; opacity:0.95;">Across 4 Key Ministries</div>
         </div>
         """, unsafe_allow_html=True)
     with s2:
@@ -556,7 +591,7 @@ def render_public_overview():
         <div class="stat-card-vibrant stat-purple">
             <div class="stat-desc">Proposals Screened</div>
             <div class="stat-num">{len(st.session_state['proposals'])}</div>
-            <div style="font-size:14px; opacity:0.9;">100% DPIIT Verified</div>
+            <div style="font-size:16px; opacity:0.95;">100% DPIIT Verified</div>
         </div>
         """, unsafe_allow_html=True)
     with s3:
@@ -564,7 +599,7 @@ def render_public_overview():
         <div class="stat-card-vibrant stat-green">
             <div class="stat-desc">Total Sandbox Grants</div>
             <div class="stat-num">₹1.10 Cr</div>
-            <div style="font-size:14px; opacity:0.9;">Zero Upfront Advance Risk</div>
+            <div style="font-size:16px; opacity:0.95;">Zero Upfront Advance Risk</div>
         </div>
         """, unsafe_allow_html=True)
     with s4:
@@ -572,18 +607,18 @@ def render_public_overview():
         <div class="stat-card-vibrant stat-amber">
             <div class="stat-desc">Avg. Time to Pilot</div>
             <div class="stat-num">14 Days</div>
-            <div style="font-size:14px; opacity:0.9;">Down from 180 Days</div>
+            <div style="font-size:16px; opacity:0.95;">Down from 180 Days</div>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top: 32px;'></div>", unsafe_allow_html=True)
     render_rich_analytics(key_suffix="overview_tab")
     st.markdown("---")
     render_cost_benefit_simulator(key_suffix="overview_tab")
 
 def render_public_challenges():
     st.markdown("## 📚 **Open Departmental Problem Statements**")
-    st.caption("Civic issues posted by Maharashtra Government departments inviting DPIIT-registered startup pilots.")
+    st.caption("Civic challenges posted by public departments inviting DPIIT-registered startup pilots.")
     
     search_q = st.text_input("🔍 Search Challenges by Keyword or Sector:", placeholder="e.g., Water, Drone, HealthTech, Agritech...", key="pub_ch_search")
     filtered = [c for c in st.session_state['challenges'] if search_q.lower() in c['title'].lower() or search_q.lower() in c['dept'].lower() or search_q.lower() in c['sector'].lower()]
@@ -599,10 +634,10 @@ def render_public_challenges():
                     <span class="pill-tag {tag_cls}">{ch['sector']}</span>
                     <span class="pill-tag tag-gov">Grant: {ch['budget']}</span>
                 </div>
-                <div style="font-size:22px; font-weight:800; color:#1e1b4b; margin: 12px 0 6px 0;">{ch['title']}</div>
-                <div style="font-size:15px; color:#64748b; margin-bottom:10px;">🏛️ Dept: <strong>{ch['dept']}</strong> · 📍 Division: <strong>{ch.get('district', 'Statewide')}</strong></div>
-                <div style="font-size:16px; color:#334155; margin-bottom:12px;">{ch['description']}</div>
-                <div style="background:#f1f5f9; border-left:5px solid #6366f1; padding:10px 14px; border-radius:8px; font-size:15px; font-weight:600; color:#1e293b;">
+                <div style="font-size:25px; font-weight:900; color:#1e1b4b; margin: 14px 0 8px 0;">{ch['title']}</div>
+                <div style="font-size:17px; color:#64748b; margin-bottom:12px;">🏛️ Dept: <strong>{ch['dept']}</strong> · 📍 Zone: <strong>{ch.get('district', 'National')}</strong></div>
+                <div style="font-size:19px; color:#334155; margin-bottom:14px;">{ch['description']}</div>
+                <div style="background:#f1f5f9; border-left:6px solid #4f46e5; padding:12px 16px; border-radius:10px; font-size:18px; font-weight:700; color:#1e293b;">
                     🎯 <strong>Target Outcome KPI:</strong> {ch['target_kpi']}
                 </div>
             </div>
@@ -620,8 +655,8 @@ def render_public_pilots():
         <div class="item-box">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                    <h3 style="margin:0; font-size:24px; color:#1e1b4b;">🚀 {prop['startup_name']}</h3>
-                    <div style="font-size:15px; color:#64748b; margin-top:4px;">Challenge: <strong>{prop['challenge_title']}</strong> · Sanctioned: <strong style="color:#4f46e5;">{prop['bid']}</strong></div>
+                    <h3 style="margin:0; font-size:27px; color:#1e1b4b;">🚀 {prop['startup_name']}</h3>
+                    <div style="font-size:18px; color:#64748b; margin-top:6px;">Challenge: <strong>{prop['challenge_title']}</strong> · Sanctioned: <strong style="color:#4f46e5;">{prop['bid']}</strong></div>
                 </div>
                 <span class="pill-tag tag-eligible">{done_count}/{len(prop['milestones'])} Milestones Cleared</span>
             </div>
@@ -643,10 +678,10 @@ def render_public_pilots():
         fig_telemetry.update_layout(
             title="📡 <b>Live Sensor Telemetry: Subterranean Non-Revenue Water Loss %</b>",
             template='plotly_white', 
-            height=300,
+            height=320,
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            font=dict(family="Plus Jakarta Sans", size=13)
+            font=dict(family="Plus Jakarta Sans", size=15)
         )
         st.plotly_chart(fig_telemetry, use_container_width=True, key=f"telemetry_chart_{prop['id']}")
 
@@ -655,27 +690,27 @@ def render_public_scaleups():
     st.caption("Once an innovative pilot achieves its target KPI, government departments issue direct scale-up sanctions.")
     for su in st.session_state['scale_ups']:
         st.markdown(f"""
-        <div class="item-box" style="border-left:8px solid #10b981;">
-            <div style="font-size:24px; font-weight:800; color:#065f46;">🚀 {su['solution_title']} — {su['startup_name']}</div>
-            <div style="font-size:15px; color:#64748b; margin:6px 0 12px 0;">Origin Pilot: <strong>{su['origin_pilot']}</strong> · Sanctioned by: <strong>{su['recommended_by']}</strong> on {su['date']}</div>
-            <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; padding:14px 18px; border-radius:12px; margin-bottom:12px;">
+        <div class="item-box" style="border-left:10px solid #10b981;">
+            <div style="font-size:27px; font-weight:900; color:#065f46;">🚀 {su['solution_title']} — {su['startup_name']}</div>
+            <div style="font-size:18px; color:#64748b; margin:8px 0 14px 0;">Origin Pilot: <strong>{su['origin_pilot']}</strong> · Sanctioned by: <strong>{su['recommended_by']}</strong> on {su['date']}</div>
+            <div style="background:#f0fdf4; border:2px solid #bbf7d0; padding:16px 20px; border-radius:14px; margin-bottom:14px; font-size:19px;">
                 <strong>🎯 Measured Ground Impact:</strong> {su['impact_so_far']}
             </div>
-            <div style="font-size:16px;"><strong>📈 Scale-Up Replication Districts:</strong> <code style="font-size:16px; color:#047857;">{su['scale_targets']}</code></div>
+            <div style="font-size:19px;"><strong>📈 Scale-Up Replication Zones:</strong> <code style="font-size:19px; color:#047857; font-weight:800;">{su['scale_targets']}</code></div>
         </div>
         """, unsafe_allow_html=True)
 
 def render_templates_library():
     st.markdown("## 📄 **Compliance & Legal Templates Library (GFR 194)**")
-    st.caption("Standardized legal templates for rapid departmental onboarding under the Maharashtra Startup Policy.")
+    st.caption("Standardized legal templates for rapid departmental onboarding under the National Startup Framework.")
     for idx, t in enumerate(st.session_state['templates']):
         with st.expander(t['title']):
             st.markdown(f"**Purpose:** {t['desc']}")
             st.code(t['content'], language=None)
-            st.download_button("⬇️ Download Template", data=t['content'], file_name=f"{t['title'][:20]}.txt", key=f"dl_tpl_{idx}")
+            st.download_button("⬇️ Download Template as .txt", data=t['content'], file_name=f"{t['title'][:20]}.txt", key=f"dl_tpl_{idx}")
 
 # -----------------------------------------------------------------------------
-# 6. AUTHENTICATION & LOGIN COMPONENT (PROMINENT & ERROR-FREE)
+# 6. AUTHENTICATION & LOGIN (PROMINENT, BIG-TEXT, FULLY FILLED BUTTONS)
 # -----------------------------------------------------------------------------
 def render_login_screen():
     st.markdown("## 🔐 **Access Government / Startup Portals**")
@@ -684,21 +719,21 @@ def render_login_screen():
     l_col1, l_col2 = st.columns([1, 1.25])
     with l_col1:
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%); border-radius: 24px; padding: 36px; color: #ffffff; height: 100%;">
-            <div style="font-size: 30px; font-weight: 900; font-family: 'Space Grotesk', sans-serif; margin-bottom: 12px;">💡 Narsby Portal</div>
-            <div style="font-size: 17px; opacity: 0.95; line-height: 1.6; margin-bottom: 22px;">
-                Government of Maharashtra · SIH 2026 Innovation Sandbox under GFR Rule 194.
+        <div style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%); border-radius: 26px; padding: 42px; color: #ffffff; height: 100%;">
+            <div style="font-size: 34px; font-weight: 900; font-family: 'Space Grotesk', sans-serif; margin-bottom: 14px;">💡 Narsby Portal</div>
+            <div style="font-size: 20px; opacity: 0.95; line-height: 1.6; margin-bottom: 24px;">
+                SIH 2026 Innovation Sandbox under General Financial Rules (GFR) Rule 194.
             </div>
-            <div style="display:flex; gap:12px; align-items:center; margin-bottom:14px; font-size:15.5px;">
+            <div style="display:flex; gap:14px; align-items:center; margin-bottom:16px; font-size:19px;">
                 ⚡ <span>Post outcome-based problems and sanction pilots in days.</span>
             </div>
-            <div style="display:flex; gap:12px; align-items:center; margin-bottom:14px; font-size:15.5px;">
+            <div style="display:flex; gap:14px; align-items:center; margin-bottom:16px; font-size:19px;">
                 🔎 <span>Automated DPIIT recognition and turnover screening.</span>
             </div>
-            <div style="display:flex; gap:12px; align-items:center; margin-bottom:14px; font-size:15.5px;">
+            <div style="display:flex; gap:14px; align-items:center; margin-bottom:16px; font-size:19px;">
                 🧾 <span>Milestone escrow with independent 3rd party audits.</span>
             </div>
-            <div style="display:flex; gap:12px; align-items:center; font-size:15.5px;">
+            <div style="display:flex; gap:14px; align-items:center; font-size:19px;">
                 📈 <span>Seamless post-pilot GeM scale-up pathways.</span>
             </div>
         </div>
@@ -710,7 +745,7 @@ def render_login_screen():
         is_gov = "Government Official" in role_select
         selected_role = "Government Official" if is_gov else "Startup Founder"
         
-        default_email = "rajesh.sharma@maharashtra.gov.in" if is_gov else "founder@jaldrishti.io"
+        default_email = "rajesh.sharma@gov.in" if is_gov else "founder@jaldrishti.io"
         default_pwd = "gov123" if is_gov else "startup123"
 
         with st.form("auth_form_main"):
@@ -729,18 +764,18 @@ def render_login_screen():
                 else:
                     st.error("Invalid credentials. Try instant demo buttons below.")
 
-        st.markdown("<div style='margin-top:14px; font-weight:800; color:#475569;'>⚡ 1-Click Instant Demo Access:</div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:18px; font-weight:900; color:#334155; font-size:20px;'>⚡ 1-Click Instant Demo Access:</div>", unsafe_allow_html=True)
         d1, d2 = st.columns(2)
         with d1:
-            if st.button("🏛️ Instant Gov Official Login", use_container_width=True, key="demo_gov_btn"):
+            if st.button("🏛️ Instant Gov Login", use_container_width=True, key="demo_gov_btn"):
                 st.session_state.update({
-                    'logged_in': True, 'user_email': "rajesh.sharma@maharashtra.gov.in",
+                    'logged_in': True, 'user_email': "rajesh.sharma@gov.in",
                     'user_role': "Government Official", 'user_name': "Dr. Rajesh Sharma (IAS)",
-                    'user_dept': "Water Supply & Sanitation Dept, Govt of Maharashtra", 'active_page': 'Dashboard'
+                    'user_dept': "Water Supply & Sanitation Department", 'active_page': 'Dashboard'
                 })
                 st.rerun()
         with d2:
-            if st.button("🚀 Instant Startup Founder Login", use_container_width=True, key="demo_startup_btn"):
+            if st.button("🚀 Instant Startup Login", use_container_width=True, key="demo_startup_btn"):
                 st.session_state.update({
                     'logged_in': True, 'user_email': "founder@jaldrishti.io",
                     'user_role': "Startup Founder", 'user_name': "Ananya Deshmukh (Founder & CEO)",
@@ -752,10 +787,10 @@ def render_login_screen():
 # -----------------------------------------------------------------------------
 # 7. TOP HEADER & INSTANT ACCESS BAR
 # -----------------------------------------------------------------------------
-top_col1, top_col2, top_col3 = st.columns([5, 1.5, 1])
+top_col1, top_col2, top_col3 = st.columns([5, 1.8, 1])
 with top_col1:
     crumb = "🌍 Public Transparency Home" if not st.session_state['logged_in'] else f"{st.session_state['user_role']} / {st.session_state['active_page']}"
-    st.markdown(f"<div style='font-size:16px; font-weight:800; color:#4f46e5; padding-top:6px;'>💡 Narsby <span style='color:#94a3b8; font-weight:600;'>/ {crumb}</span></div>", unsafe_allow_html=True)
+    st.markdown(f"<div style='font-size:20px; font-weight:900; color:#4f46e5; padding-top:8px;'>💡 Narsby <span style='color:#94a3b8; font-weight:700;'>/ {crumb}</span></div>", unsafe_allow_html=True)
 
 with top_col2:
     if not st.session_state['logged_in']:
@@ -780,14 +815,13 @@ if not st.session_state['logged_in']:
     <div class="hero-banner-public">
         <div class="hero-title">💡 Narsby • Startup-Friendly Public Procurement Platform</div>
         <div class="hero-subtitle">
-            Government of Maharashtra · Smart India Hackathon 2026 · Problem Statement SIH26136<br>
-            A high-speed innovation sandbox under <strong>GFR Rule 194</strong> bridging startups with municipal & state agencies.
+            Smart India Hackathon 2026 · Problem Statement SIH26136<br>
+            A high-speed public procurement sandbox under <strong>GFR Rule 194</strong> bridging startups with government agencies.
         </div>
-        <div class="hero-pill">⚡ Identify Problem ➔ Fast-Track Pilot ➔ Independent Validation ➔ State Scale-Up</div>
+        <div class="hero-pill">⚡ Identify Problem ➔ Fast-Track Pilot ➔ Independent Validation ➔ Scale-Up</div>
     </div>
     """, unsafe_allow_html=True)
 
-    # Clean tabs - LOGIN IS PROMINENTLY IN TAB 0
     pub_tabs = st.tabs([
         "🔐 Sign In / Portals", 
         "🌍 Overview & Stats", 
@@ -816,11 +850,11 @@ if not st.session_state['logged_in']:
 # -----------------------------------------------------------------------------
 with st.sidebar:
     st.markdown(f"""
-    <div style="font-size:26px; font-weight:900; color:#1e1b4b; font-family:'Space Grotesk',sans-serif;">💡 Narsby</div>
-    <div style="font-size:14px; font-weight:700; color:#6366f1; margin-bottom:16px;">Govt of Maharashtra Sandbox</div>
-    <div style="background:#ffffff; border:2px solid #e0e7ff; border-radius:14px; padding:12px; margin-bottom:20px;">
-        <div style="font-size:16px; font-weight:800; color:#0f172a;">{st.session_state['user_name']}</div>
-        <div style="font-size:13.5px; color:#64748b;">{st.session_state['user_role']}</div>
+    <div style="font-size:30px; font-weight:900; color:#1e1b4b; font-family:'Space Grotesk',sans-serif;">💡 Narsby</div>
+    <div style="font-size:16px; font-weight:800; color:#6366f1; margin-bottom:18px;">Public Procurement Sandbox</div>
+    <div style="background:#ffffff; border:2.5px solid #cbd5e1; border-radius:16px; padding:16px; margin-bottom:24px;">
+        <div style="font-size:20px; font-weight:900; color:#0f172a;">{st.session_state['user_name']}</div>
+        <div style="font-size:16px; color:#64748b; font-weight:700;">{st.session_state['user_role']}</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -875,13 +909,13 @@ if st.session_state['user_role'] == 'Government Official':
             c_title = st.text_input("Challenge Title", placeholder="e.g., AI Drone Wildlife Conflict Mitigation & Thermal Alert", key="new_ch_title")
             col1, col2 = st.columns(2)
             with col1:
-                c_dept = st.selectbox("Department", ["Water Supply & Sanitation", "Urban Development", "Public Health", "Agriculture & Farmers Welfare", "PWD", "Forest & Environment"], key="new_ch_dept")
+                c_dept = st.selectbox("Department", ["Water Supply & Sanitation", "Urban Development", "Public Health", "Agriculture & Farmers Welfare", "Public Works Department", "Environment & Forest"], key="new_ch_dept")
                 c_budget = st.selectbox("Sanctioned Sandbox Grant Pool", ["₹20 Lakhs", "₹25 Lakhs", "₹35 Lakhs", "₹50 Lakhs"], key="new_ch_budget")
             with col2:
                 c_sector = st.selectbox("Sector", ["Water & Smart City", "AI & Drone Mobility", "HealthTech", "Agritech", "CleanTech"], key="new_ch_sector")
                 c_duration = st.selectbox("Pilot Duration", ["2 Months", "3 Months", "4 Months", "6 Months"], key="new_ch_duration")
             c_kpi = st.text_input("Measurable Target KPI Benchmark", placeholder="e.g., Detect intrusion within 90 seconds with ≥ 95% accuracy", key="new_ch_kpi")
-            c_desc = st.text_area("Detailed Problem Context & Existing Bottlenecks", height=120, key="new_ch_desc")
+            c_desc = st.text_area("Detailed Problem Context & Existing Bottlenecks", height=130, key="new_ch_desc")
             if st.form_submit_button("🚀 Publish Challenge to Live Sandbox →", type="primary", use_container_width=True):
                 if c_title and c_kpi and c_desc:
                     st.session_state['challenges'].append({
@@ -900,15 +934,15 @@ if st.session_state['user_role'] == 'Government Official':
             <div class="item-box">
                 <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                     <div>
-                        <h3 style="margin:0; font-size:24px; color:#1e1b4b;">{prop['startup_name']}</h3>
-                        <div style="font-size:15px; color:#64748b; margin-top:4px;">Challenge: <strong>{prop['challenge_title']}</strong> · DPIIT: <strong>{prop['dpiit_id']}</strong></div>
+                        <h3 style="margin:0; font-size:27px; color:#1e1b4b;">{prop['startup_name']}</h3>
+                        <div style="font-size:18px; color:#64748b; margin-top:6px;">Challenge: <strong>{prop['challenge_title']}</strong> · DPIIT: <strong>{prop['dpiit_id']}</strong></div>
                     </div>
                     <span class="pill-tag tag-eligible">Match Score: {prop['match_score']}%</span>
                 </div>
-                <div style="background:#f8fafc; padding:16px; border-radius:12px; margin:14px 0; font-size:16px;">
+                <div style="background:#f8fafc; padding:20px; border-radius:14px; margin:16px 0; font-size:19px;">
                     <strong>Solution Approach:</strong> {prop['solution']}
                 </div>
-                <div style="display:flex; gap:20px; font-size:15px; color:#475569;">
+                <div style="display:flex; gap:24px; font-size:18px; color:#475569;">
                     <span>💰 Bid: <strong>{prop['bid']}</strong></span>
                     <span>⏱️ Duration: <strong>{prop['duration']}</strong></span>
                     <span>🔬 Readiness: <strong>TRL {prop['trl']}</strong></span>
@@ -949,7 +983,11 @@ else:  # Startup Founder
                 bid_amt = st.selectbox("Proposed Fast-Track Pilot Budget", ["₹18,50,000", "₹23,50,000", "₹31,00,000"], key="st_prop_bid")
             with col2:
                 trl_val = st.slider("Demonstrated TRL Level", 5, 9, 8, key="st_prop_trl")
-            tech_sol = st.text_area("Technical Architecture & Deployment Strategy", height=130, key="st_prop_sol")
+            tech_sol = st.text_area("Technical Architecture & Deployment Strategy", height=140, key="st_prop_sol")
+            
+            st.markdown("#### 📁 Supporting Architecture & Technical Dossier")
+            st.file_uploader("Upload Solution Architecture / Pitch Deck (PDF)", type=["pdf", "docx"], key="prop_doc_upload")
+            
             if st.form_submit_button("🚀 Submit Proposal to Technical Committee →", type="primary", use_container_width=True):
                 st.session_state['proposals'].append({
                     'id': f"PROP-{100 + len(st.session_state['proposals']) + 1}",
@@ -957,7 +995,7 @@ else:  # Startup Founder
                     'challenge_title': ch_choice.split(' — ')[1],
                     'startup_name': st.session_state['user_dept'],
                     'founder_email': st.session_state['user_email'],
-                    'dpiit_id': 'DIPP-MH-44512',
+                    'dpiit_id': 'DIPP-IN-44512',
                     'bid': bid_amt, 'duration': '3 Months', 'trl': trl_val, 'match_score': 94,
                     'status': 'Under Technical Committee Review',
                     'solution': tech_sol,
