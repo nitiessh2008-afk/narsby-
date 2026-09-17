@@ -63,7 +63,7 @@ st.markdown("""
     }
     [data-testid="stMainBlockContainer"], .main .block-container {
         background: transparent !important;
-        padding-top: 1.8rem !important;
+        padding-top: 1.5rem !important;
     }
 
     /* Widget Surfaces */
@@ -154,10 +154,10 @@ st.markdown("""
     .hero-banner-public {
         background: linear-gradient(125deg, #e0e7ff 0%, #fae8ff 45%, #dcfce7 100%);
         border-radius: 26px;
-        padding: 40px 45px;
+        padding: 36px 40px;
         border: 2.5px solid #c7d2fe;
         box-shadow: 0 16px 36px rgba(99, 102, 241, 0.12);
-        margin-bottom: 28px;
+        margin-bottom: 22px;
     }
     .hero-banner-gov {
         background: linear-gradient(125deg, #dbeafe 0%, #e0e7ff 50%, #ede9fe 100%);
@@ -165,7 +165,7 @@ st.markdown("""
         padding: 38px 42px;
         border: 2.5px solid #bfdbfe;
         box-shadow: 0 16px 36px rgba(59, 130, 246, 0.14);
-        margin-bottom: 28px;
+        margin-bottom: 24px;
     }
     .hero-banner-startup {
         background: linear-gradient(125deg, #fae8ff 0%, #fce7f3 50%, #ede9fe 100%);
@@ -173,10 +173,10 @@ st.markdown("""
         padding: 38px 42px;
         border: 2.5px solid #f5d0fe;
         box-shadow: 0 16px 36px rgba(192, 38, 211, 0.12);
-        margin-bottom: 28px;
+        margin-bottom: 24px;
     }
-    .hero-title { font-size: 36px; font-weight: 900; color: #1e1b4b; letter-spacing: -0.8px; margin-bottom: 12px; font-family: 'Space Grotesk', sans-serif; }
-    .hero-subtitle { font-size: 19px; color: #334155; font-weight: 600; line-height: 1.6; margin-bottom: 14px; }
+    .hero-title { font-size: 34px; font-weight: 900; color: #1e1b4b; letter-spacing: -0.8px; margin-bottom: 10px; font-family: 'Space Grotesk', sans-serif; }
+    .hero-subtitle { font-size: 18px; color: #334155; font-weight: 600; line-height: 1.6; margin-bottom: 12px; }
     .hero-pill { background: #ffffff; padding: 6px 16px; border-radius: 30px; font-weight: 800; font-size: 14.5px; color: #4338ca; border: 1.5px solid #c7d2fe; display: inline-block; }
 
     /* Card Items */
@@ -184,8 +184,8 @@ st.markdown("""
         background: #ffffff;
         border: 2px solid #e2e8f0;
         border-radius: 20px;
-        padding: 26px 30px;
-        margin-bottom: 22px;
+        padding: 24px 28px;
+        margin-bottom: 20px;
         box-shadow: 0 8px 24px rgba(99, 102, 241, 0.06);
         transition: border-color 0.25s ease, transform 0.2s ease;
     }
@@ -214,7 +214,7 @@ st.markdown("""
         background: #ffffff;
         border-radius: 24px;
         border: 2.5px solid #e0e7ff;
-        padding: 38px 42px;
+        padding: 34px 38px;
         box-shadow: 0 20px 48px rgba(79, 70, 229, 0.12);
     }
 </style>
@@ -371,15 +371,14 @@ Step 4: Department-wide multi-year rate contract execution.
     st.session_state['initialized'] = True
 
 # -----------------------------------------------------------------------------
-# 3. STATISTICAL VISUALIZATIONS & DEEP ANALYTICS COMPONENT
+# 3. STATISTICAL VISUALIZATIONS (WITH UNIQUE KEYS TO PREVENT DUPLICATE ID CRASH)
 # -----------------------------------------------------------------------------
-def render_rich_analytics():
+def render_rich_analytics(key_suffix="default"):
     st.markdown("## 📊 **Deep Statistical Analysis & Procurement Intelligence**")
     st.caption("Empirical performance data, expenditure allocations, and turnaround metrics across Maharashtra departments.")
 
     r1, r2 = st.columns(2)
     with r1:
-        # 1. Procurement Speed: Conventional GFR Tender vs Narsby Sandbox
         speed_df = pd.DataFrame({
             'Procurement Stage': ['Problem Definition', 'Evaluation & Review', 'Sanction & Award', 'Payment Release'],
             'Conventional Tender (Days)': [45, 60, 45, 30],
@@ -414,10 +413,9 @@ def render_rich_analytics():
             font=dict(family="Plus Jakarta Sans", size=14, color="#0f172a"),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
         )
-        st.plotly_chart(fig_speed, use_container_width=True)
+        st.plotly_chart(fig_speed, use_container_width=True, key=f"chart_speed_{key_suffix}")
 
     with r2:
-        # 2. Sector Grant Allocation Donut Chart
         sec_df = pd.DataFrame({
             'Sector': ['Water Tech', 'AI & Drone Mobility', 'HealthTech', 'Agritech'],
             'Sanctioned Budget (Lakhs)': [25, 35, 30, 20]
@@ -442,11 +440,10 @@ def render_rich_analytics():
             showlegend=False,
             font=dict(family="Plus Jakarta Sans", size=14, color="#0f172a")
         )
-        st.plotly_chart(fig_donut, use_container_width=True)
+        st.plotly_chart(fig_donut, use_container_width=True, key=f"chart_donut_{key_suffix}")
 
     r3, r4 = st.columns(2)
     with r3:
-        # 3. District-Level Pilot Adoption Radar Chart
         categories = ['Citizen Impact', 'Deployment Speed', 'Cost Savings', 'Vendor Diversity', 'Data Compliance']
         fig_radar = go.Figure()
         fig_radar.add_trace(go.Scatterpolar(
@@ -472,12 +469,11 @@ def render_rich_analytics():
             paper_bgcolor='rgba(0,0,0,0)',
             font=dict(family="Plus Jakarta Sans", size=14, color="#0f172a")
         )
-        st.plotly_chart(fig_radar, use_container_width=True)
+        st.plotly_chart(fig_radar, use_container_width=True, key=f"chart_radar_{key_suffix}")
 
     with r4:
-        # 4. TRL vs Budget Bubble Matrix
         bubble_df = pd.DataFrame({
-            'Challenge': ['Water IoT', 'Drone Roads', 'Health Kiosk', 'Agri Sensor', 'Smart Grid (Upcoming)'],
+            'Challenge': ['Water IoT', 'Drone Roads', 'Health Kiosk', 'Agri Sensor', 'Smart Grid'],
             'TRL': [8, 7, 6, 7, 9],
             'Budget': [25, 35, 30, 20, 45],
             'Startups Applied': [4, 6, 3, 2, 8],
@@ -502,21 +498,21 @@ def render_rich_analytics():
             plot_bgcolor='rgba(0,0,0,0)',
             font=dict(family="Plus Jakarta Sans", size=14, color="#0f172a")
         )
-        st.plotly_chart(fig_bubble, use_container_width=True)
+        st.plotly_chart(fig_bubble, use_container_width=True, key=f"chart_bubble_{key_suffix}")
 
 # -----------------------------------------------------------------------------
-# 4. INTERACTIVE ROI & COST-BENEFIT SIMULATOR
+# 4. INTERACTIVE ROI & COST-BENEFIT SIMULATOR (WITH UNIQUE KEYS)
 # -----------------------------------------------------------------------------
-def render_cost_benefit_simulator():
+def render_cost_benefit_simulator(key_suffix="default"):
     st.markdown("## 🧮 **Interactive Public Procurement ROI Simulator**")
     st.caption("Calculate quantifiable taxpayer savings, risk mitigation, and cycle-time compression under GFR 194.")
 
     col1, col2 = st.columns([1.1, 1])
     with col1:
         st.markdown("#### ⚙️ Input Parameters:")
-        annual_procurements = st.slider("Number of Innovative Pilot Projects per Year:", 5, 100, 24, step=1)
-        avg_pilot_grant = st.slider("Average Sandbox Pilot Grant (₹ Lakhs):", 10, 100, 25, step=5)
-        failure_rate = st.slider("Conventional Tender Failure / Rework Risk (%):", 15, 60, 35, step=5)
+        annual_procurements = st.slider("Number of Innovative Pilot Projects per Year:", 5, 100, 24, step=1, key=f"sim_ann_{key_suffix}")
+        avg_pilot_grant = st.slider("Average Sandbox Pilot Grant (₹ Lakhs):", 10, 100, 25, step=5, key=f"sim_grant_{key_suffix}")
+        failure_rate = st.slider("Conventional Tender Failure / Rework Risk (%):", 15, 60, 35, step=5, key=f"sim_fail_{key_suffix}")
 
         conventional_tender_cost = annual_procurements * (avg_pilot_grant * 1.65)
         sandbox_cost = annual_procurements * avg_pilot_grant
@@ -581,15 +577,15 @@ def render_public_overview():
         """, unsafe_allow_html=True)
 
     st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
-    render_rich_analytics()
+    render_rich_analytics(key_suffix="overview_tab")
     st.markdown("---")
-    render_cost_benefit_simulator()
+    render_cost_benefit_simulator(key_suffix="overview_tab")
 
 def render_public_challenges():
     st.markdown("## 📚 **Open Departmental Problem Statements**")
     st.caption("Civic issues posted by Maharashtra Government departments inviting DPIIT-registered startup pilots.")
     
-    search_q = st.text_input("🔍 Search Challenges by Keyword or Sector:", placeholder="e.g., Water, Drone, HealthTech, Agritech...")
+    search_q = st.text_input("🔍 Search Challenges by Keyword or Sector:", placeholder="e.g., Water, Drone, HealthTech, Agritech...", key="pub_ch_search")
     filtered = [c for c in st.session_state['challenges'] if search_q.lower() in c['title'].lower() or search_q.lower() in c['dept'].lower() or search_q.lower() in c['sector'].lower()]
 
     col_l, col_r = st.columns(2)
@@ -652,7 +648,7 @@ def render_public_pilots():
             plot_bgcolor='rgba(0,0,0,0)',
             font=dict(family="Plus Jakarta Sans", size=13)
         )
-        st.plotly_chart(fig_telemetry, use_container_width=True)
+        st.plotly_chart(fig_telemetry, use_container_width=True, key=f"telemetry_chart_{prop['id']}")
 
 def render_public_scaleups():
     st.markdown("## 🏆 **Success Stories & Scale-Up Decisions**")
@@ -672,52 +668,54 @@ def render_public_scaleups():
 def render_templates_library():
     st.markdown("## 📄 **Compliance & Legal Templates Library (GFR 194)**")
     st.caption("Standardized legal templates for rapid departmental onboarding under the Maharashtra Startup Policy.")
-    for t in st.session_state['templates']:
+    for idx, t in enumerate(st.session_state['templates']):
         with st.expander(t['title']):
             st.markdown(f"**Purpose:** {t['desc']}")
             st.code(t['content'], language=None)
-            st.download_button("⬇️ Download Template", data=t['content'], file_name=f"{t['title'][:20]}.txt")
+            st.download_button("⬇️ Download Template", data=t['content'], file_name=f"{t['title'][:20]}.txt", key=f"dl_tpl_{idx}")
 
 # -----------------------------------------------------------------------------
-# 6. AUTHENTICATION & LOGIN COMPONENT
+# 6. AUTHENTICATION & LOGIN COMPONENT (PROMINENT & ERROR-FREE)
 # -----------------------------------------------------------------------------
 def render_login_screen():
-    st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+    st.markdown("## 🔐 **Access Government / Startup Portals**")
+    st.caption("Select your role below or use the 1-click instant login buttons for live judging demonstrations.")
+    
     l_col1, l_col2 = st.columns([1, 1.25])
     with l_col1:
         st.markdown("""
-        <div style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%); border-radius: 24px; padding: 42px; color: #ffffff; height: 100%;">
-            <div style="font-size: 32px; font-weight: 900; font-family: 'Space Grotesk', sans-serif; margin-bottom: 12px;">💡 Narsby Portal</div>
-            <div style="font-size: 18px; opacity: 0.95; line-height: 1.6; margin-bottom: 24px;">
+        <div style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%); border-radius: 24px; padding: 36px; color: #ffffff; height: 100%;">
+            <div style="font-size: 30px; font-weight: 900; font-family: 'Space Grotesk', sans-serif; margin-bottom: 12px;">💡 Narsby Portal</div>
+            <div style="font-size: 17px; opacity: 0.95; line-height: 1.6; margin-bottom: 22px;">
                 Government of Maharashtra · SIH 2026 Innovation Sandbox under GFR Rule 194.
             </div>
-            <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px; font-size:16px;">
+            <div style="display:flex; gap:12px; align-items:center; margin-bottom:14px; font-size:15.5px;">
                 ⚡ <span>Post outcome-based problems and sanction pilots in days.</span>
             </div>
-            <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px; font-size:16px;">
+            <div style="display:flex; gap:12px; align-items:center; margin-bottom:14px; font-size:15.5px;">
                 🔎 <span>Automated DPIIT recognition and turnover screening.</span>
             </div>
-            <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px; font-size:16px;">
+            <div style="display:flex; gap:12px; align-items:center; margin-bottom:14px; font-size:15.5px;">
                 🧾 <span>Milestone escrow with independent 3rd party audits.</span>
             </div>
-            <div style="display:flex; gap:12px; align-items:center; font-size:16px;">
+            <div style="display:flex; gap:12px; align-items:center; font-size:15.5px;">
                 📈 <span>Seamless post-pilot GeM scale-up pathways.</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
     with l_col2:
         st.markdown("<div class='login-container'>", unsafe_allow_html=True)
-        st.markdown("### 🔐 **Sign In to Access Your Portal**")
-        role_select = st.radio("Select Persona:", ["🏛️ Government Official (Dept Head / Procuring Entity)", "🚀 Startup Founder (DPIIT Registered Innovator)"], index=0)
+        st.markdown("### 🔑 **Sign In**")
+        role_select = st.radio("Select Portal Persona:", ["🏛️ Government Official (Dept Head / Procuring Entity)", "🚀 Startup Founder (DPIIT Registered Innovator)"], index=0, key="portal_role_select")
         is_gov = "Government Official" in role_select
         selected_role = "Government Official" if is_gov else "Startup Founder"
         
         default_email = "rajesh.sharma@maharashtra.gov.in" if is_gov else "founder@jaldrishti.io"
         default_pwd = "gov123" if is_gov else "startup123"
 
-        with st.form("auth_form"):
-            in_email = st.text_input("Registered Official Email", value=default_email)
-            in_pwd = st.text_input("Password", type="password", value=default_pwd)
+        with st.form("auth_form_main"):
+            in_email = st.text_input("Registered Email", value=default_email, key="auth_email_in")
+            in_pwd = st.text_input("Password", type="password", value=default_pwd, key="auth_pwd_in")
             submit_auth = st.form_submit_button(f"Sign In as {selected_role} →", type="primary", use_container_width=True)
             if submit_auth:
                 if in_email in USERS_DB and USERS_DB[in_email]['password'] == in_pwd:
@@ -731,10 +729,10 @@ def render_login_screen():
                 else:
                     st.error("Invalid credentials. Try instant demo buttons below.")
 
-        st.markdown("<div style='margin-top:14px; font-weight:700; color:#64748b;'>⚡ Quick 1-Click Demo Logins:</div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:14px; font-weight:800; color:#475569;'>⚡ 1-Click Instant Demo Access:</div>", unsafe_allow_html=True)
         d1, d2 = st.columns(2)
         with d1:
-            if st.button("🏛️ Instant Gov Login", use_container_width=True):
+            if st.button("🏛️ Instant Gov Official Login", use_container_width=True, key="demo_gov_btn"):
                 st.session_state.update({
                     'logged_in': True, 'user_email': "rajesh.sharma@maharashtra.gov.in",
                     'user_role': "Government Official", 'user_name': "Dr. Rajesh Sharma (IAS)",
@@ -742,7 +740,7 @@ def render_login_screen():
                 })
                 st.rerun()
         with d2:
-            if st.button("🚀 Instant Startup Login", use_container_width=True):
+            if st.button("🚀 Instant Startup Founder Login", use_container_width=True, key="demo_startup_btn"):
                 st.session_state.update({
                     'logged_in': True, 'user_email': "founder@jaldrishti.io",
                     'user_role': "Startup Founder", 'user_name': "Ananya Deshmukh (Founder & CEO)",
@@ -752,14 +750,21 @@ def render_login_screen():
         st.markdown("</div>", unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# 7. NOTIFICATION BAR & TOP NAVIGATION
+# 7. TOP HEADER & INSTANT ACCESS BAR
 # -----------------------------------------------------------------------------
-top_col1, top_col2 = st.columns([6, 1])
+top_col1, top_col2, top_col3 = st.columns([5, 1.5, 1])
 with top_col1:
     crumb = "🌍 Public Transparency Home" if not st.session_state['logged_in'] else f"{st.session_state['user_role']} / {st.session_state['active_page']}"
     st.markdown(f"<div style='font-size:16px; font-weight:800; color:#4f46e5; padding-top:6px;'>💡 Narsby <span style='color:#94a3b8; font-weight:600;'>/ {crumb}</span></div>", unsafe_allow_html=True)
+
 with top_col2:
-    if st.button(f"🔔 {len(st.session_state['notifications'])}", use_container_width=True):
+    if not st.session_state['logged_in']:
+        if st.button("🔐 Quick Sign-In", type="primary", use_container_width=True, key="top_quick_signin_btn"):
+            st.session_state['show_login_directly'] = True
+            st.rerun()
+
+with top_col3:
+    if st.button(f"🔔 {len(st.session_state['notifications'])}", use_container_width=True, key="top_bell_btn"):
         st.session_state['show_notifications'] = not st.session_state['show_notifications']
 
 if st.session_state.get('show_notifications'):
@@ -767,7 +772,9 @@ if st.session_state.get('show_notifications'):
         for n in st.session_state['notifications']:
             st.markdown(f"**{n['title']}** — {n['detail']} *({n['date']})*")
 
-# If Not Logged In -> Show Public Portal
+# -----------------------------------------------------------------------------
+# 8. PUBLIC HOME PAGE (IF NOT LOGGED IN)
+# -----------------------------------------------------------------------------
 if not st.session_state['logged_in']:
     st.markdown("""
     <div class="hero-banner-public">
@@ -780,25 +787,32 @@ if not st.session_state['logged_in']:
     </div>
     """, unsafe_allow_html=True)
 
-    pub_tabs = st.tabs(["🌍 Overview & Stats", "📚 Open Challenges", "🛰️ Live Pilots Tracker", "🏆 Scale-Up Decisions", "📊 Statistical Analytics", "📄 Compliance Library"])
+    # Clean tabs - LOGIN IS PROMINENTLY IN TAB 0
+    pub_tabs = st.tabs([
+        "🔐 Sign In / Portals", 
+        "🌍 Overview & Stats", 
+        "📚 Open Challenges", 
+        "🛰️ Live Pilots Tracker", 
+        "🏆 Scale-Up Decisions", 
+        "📄 Compliance Library"
+    ])
     with pub_tabs[0]:
-        render_public_overview()
+        render_login_screen()
     with pub_tabs[1]:
-        render_public_challenges()
+        render_public_overview()
     with pub_tabs[2]:
-        render_public_pilots()
+        render_public_challenges()
     with pub_tabs[3]:
-        render_public_scaleups()
+        render_public_pilots()
     with pub_tabs[4]:
-        render_rich_analytics()
+        render_public_scaleups()
     with pub_tabs[5]:
         render_templates_library()
 
-    render_login_screen()
     st.stop()
 
 # -----------------------------------------------------------------------------
-# 8. SIDEBAR NAVIGATION
+# 9. LOGGED-IN SIDEBAR
 # -----------------------------------------------------------------------------
 with st.sidebar:
     st.markdown(f"""
@@ -811,27 +825,37 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     if st.session_state['user_role'] == 'Government Official':
-        navs = [("📊 Executive Dashboard", "Dashboard"), ("➕ Post New Problem", "Post Challenge"), 
-                ("📥 Review Proposals", "Review Proposals"), ("🛰️ Supervise Pilots", "Active Pilots"), 
-                ("📈 Deep Analytics", "Analytics"), ("📄 Templates Library", "Templates")]
+        navs = [
+            ("📊 Executive Dashboard", "Dashboard"),
+            ("➕ Post New Problem", "Post Challenge"),
+            ("📥 Review Proposals", "Review Proposals"),
+            ("🛰️ Supervise Pilots", "Active Pilots"),
+            ("📈 Deep Analytics", "Analytics"),
+            ("📄 Templates Library", "Templates")
+        ]
     else:
-        navs = [("🚀 Startup Dashboard", "Dashboard"), ("📚 Browse Challenges", "Browse Challenges"), 
-                ("📝 Submit Proposal", "Submit Proposal"), ("🛰️ My Active Pilots", "Active Pilots"), 
-                ("🧮 ROI Calculator", "ROI Calculator"), ("📄 Templates Library", "Templates")]
+        navs = [
+            ("🚀 Startup Dashboard", "Dashboard"),
+            ("📚 Browse Challenges", "Browse Challenges"),
+            ("📝 Submit Proposal", "Submit Proposal"),
+            ("🛰️ My Active Pilots", "Active Pilots"),
+            ("🧮 ROI Calculator", "ROI Calculator"),
+            ("📄 Templates Library", "Templates")
+        ]
 
     for lbl, target in navs:
-        is_cur = st.session_state['active_page'] == target
-        if st.button(lbl, key=f"btn_{target}", use_container_width=True, type="primary" if is_cur else "secondary"):
+        is_cur = (st.session_state['active_page'] == target)
+        if st.button(lbl, key=f"nav_btn_{target}", use_container_width=True, type="primary" if is_cur else "secondary"):
             st.session_state['active_page'] = target
             st.rerun()
 
     st.markdown("---")
-    if st.button("🚪 Sign Out", use_container_width=True):
+    if st.button("🚪 Sign Out (Log Out)", use_container_width=True, key="sidebar_signout_btn"):
         st.session_state['logged_in'] = False
         st.rerun()
 
 # -----------------------------------------------------------------------------
-# 9. ROLE-SPECIFIC WORKSPACES
+# 10. ROLE-SPECIFIC WORKSPACES
 # -----------------------------------------------------------------------------
 if st.session_state['user_role'] == 'Government Official':
     if st.session_state['active_page'] == 'Dashboard':
@@ -847,17 +871,17 @@ if st.session_state['user_role'] == 'Government Official':
     elif st.session_state['active_page'] == 'Post Challenge':
         st.markdown("## ➕ **Post New Outcome-Based Civic Challenge**")
         st.caption("Frame challenges based on measurable outcome KPIs rather than rigid technical specifications.")
-        with st.form("gov_new_ch"):
-            c_title = st.text_input("Challenge Title", placeholder="e.g., AI Drone Wildlife Conflict Mitigation & Thermal Alert")
+        with st.form("gov_new_ch_form"):
+            c_title = st.text_input("Challenge Title", placeholder="e.g., AI Drone Wildlife Conflict Mitigation & Thermal Alert", key="new_ch_title")
             col1, col2 = st.columns(2)
             with col1:
-                c_dept = st.selectbox("Department", ["Water Supply & Sanitation", "Urban Development", "Public Health", "Agriculture & Farmers Welfare", "PWD", "Forest & Environment"])
-                c_budget = st.selectbox("Sanctioned Sandbox Grant Pool", ["₹20 Lakhs", "₹25 Lakhs", "₹35 Lakhs", "₹50 Lakhs"])
+                c_dept = st.selectbox("Department", ["Water Supply & Sanitation", "Urban Development", "Public Health", "Agriculture & Farmers Welfare", "PWD", "Forest & Environment"], key="new_ch_dept")
+                c_budget = st.selectbox("Sanctioned Sandbox Grant Pool", ["₹20 Lakhs", "₹25 Lakhs", "₹35 Lakhs", "₹50 Lakhs"], key="new_ch_budget")
             with col2:
-                c_sector = st.selectbox("Sector", ["Water & Smart City", "AI & Drone Mobility", "HealthTech", "Agritech", "CleanTech"])
-                c_duration = st.selectbox("Pilot Duration", ["2 Months", "3 Months", "4 Months", "6 Months"])
-            c_kpi = st.text_input("Measurable Target KPI Benchmark", placeholder="e.g., Detect intrusion within 90 seconds with ≥ 95% accuracy")
-            c_desc = st.text_area("Detailed Problem Context & Existing Bottlenecks", height=120)
+                c_sector = st.selectbox("Sector", ["Water & Smart City", "AI & Drone Mobility", "HealthTech", "Agritech", "CleanTech"], key="new_ch_sector")
+                c_duration = st.selectbox("Pilot Duration", ["2 Months", "3 Months", "4 Months", "6 Months"], key="new_ch_duration")
+            c_kpi = st.text_input("Measurable Target KPI Benchmark", placeholder="e.g., Detect intrusion within 90 seconds with ≥ 95% accuracy", key="new_ch_kpi")
+            c_desc = st.text_area("Detailed Problem Context & Existing Bottlenecks", height=120, key="new_ch_desc")
             if st.form_submit_button("🚀 Publish Challenge to Live Sandbox →", type="primary", use_container_width=True):
                 if c_title and c_kpi and c_desc:
                     st.session_state['challenges'].append({
@@ -900,7 +924,7 @@ if st.session_state['user_role'] == 'Government Official':
     elif st.session_state['active_page'] == 'Active Pilots':
         render_public_pilots()
     elif st.session_state['active_page'] == 'Analytics':
-        render_rich_analytics()
+        render_rich_analytics(key_suffix="gov_analytics_page")
     elif st.session_state['active_page'] == 'Templates':
         render_templates_library()
 
@@ -918,14 +942,14 @@ else:  # Startup Founder
         render_public_challenges()
     elif st.session_state['active_page'] == 'Submit Proposal':
         st.markdown("## 📝 **Submit Pilot Proposal under GFR 194**")
-        with st.form("st_submit_prop"):
-            ch_choice = st.selectbox("Select Target Challenge", [f"{c['id']} — {c['title']}" for c in st.session_state['challenges']])
+        with st.form("st_submit_prop_form"):
+            ch_choice = st.selectbox("Select Target Challenge", [f"{c['id']} — {c['title']}" for c in st.session_state['challenges']], key="st_prop_ch_choice")
             col1, col2 = st.columns(2)
             with col1:
-                bid_amt = st.selectbox("Proposed Fast-Track Pilot Budget", ["₹18,50,000", "₹23,50,000", "₹31,00,000"])
+                bid_amt = st.selectbox("Proposed Fast-Track Pilot Budget", ["₹18,50,000", "₹23,50,000", "₹31,00,000"], key="st_prop_bid")
             with col2:
-                trl_val = st.slider("Demonstrated TRL Level", 5, 9, 8)
-            tech_sol = st.text_area("Technical Architecture & Deployment Strategy", height=130)
+                trl_val = st.slider("Demonstrated TRL Level", 5, 9, 8, key="st_prop_trl")
+            tech_sol = st.text_area("Technical Architecture & Deployment Strategy", height=130, key="st_prop_sol")
             if st.form_submit_button("🚀 Submit Proposal to Technical Committee →", type="primary", use_container_width=True):
                 st.session_state['proposals'].append({
                     'id': f"PROP-{100 + len(st.session_state['proposals']) + 1}",
@@ -944,6 +968,6 @@ else:  # Startup Founder
     elif st.session_state['active_page'] == 'Active Pilots':
         render_public_pilots()
     elif st.session_state['active_page'] == 'ROI Calculator':
-        render_cost_benefit_simulator()
+        render_cost_benefit_simulator(key_suffix="startup_calc_page")
     elif st.session_state['active_page'] == 'Templates':
         render_templates_library()
